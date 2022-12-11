@@ -1,3 +1,5 @@
+// This tab is Ending.
+
 class Ending implements Scene {
   Ending() {
   }
