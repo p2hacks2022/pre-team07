@@ -4,5 +4,5 @@ void setup() {
 }
 
 void draw() {
-  
+  new Title().draw();
 }
