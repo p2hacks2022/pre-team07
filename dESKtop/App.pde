@@ -13,6 +13,7 @@ class App {
       new Ending(), 
       new Transition()
     };
+    // シーン遷移するごとにsetupFlagをtrueにする
     setupFlag = true;
     scene = 0;
   }
