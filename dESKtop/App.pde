@@ -21,6 +21,7 @@ class App {
   void run() {
     if (setupFlag) {
       sceneList[scene].setup();
+      // シーン遷移後一度だけsetup関数を実行しsetupFlagをfalseにすることで以降実行されなくする
       setupFlag = false;
     }
     sceneList[scene].draw();
