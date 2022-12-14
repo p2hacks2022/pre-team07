@@ -13,6 +13,11 @@ class DataSelect implements Scene {
   }
 
   void keyPressed() {
+    if (keyCode == LEFT) {
+      app.changeScene(0);
+    } else if (keyCode == RIGHT) {
+      app.changeScene(1);
+    }
   }
 
   void mousePressed() {

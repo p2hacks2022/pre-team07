@@ -15,6 +15,11 @@ class Title implements Scene {
   }
 
   void keyPressed() {
+    if (keyCode == LEFT) {
+      app.changeScene(3);
+    } else if (keyCode == RIGHT) {
+      app.changeScene(1);
+    }
   }
 
   void mousePressed() {
