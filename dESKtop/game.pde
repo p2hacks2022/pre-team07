@@ -4,9 +4,8 @@ class Game implements Scene {
   ArrayList<Npc> npcs;
   Enemy enemy;
   String playData;
-  
+
   Game() {
-    
   }
 
   void setup() {
@@ -31,12 +30,12 @@ class Game implements Scene {
 
   void mousePressed() {
   }
-  
-  void loadMap(int mapNum){
+
+  void loadMap(int mapNum) {
     map = loadTable("map"+mapNum+".csv");
   }
-  
-  void showMap(){
+
+  void showMap() {
     int posX = player.pos.x;
     int posY = player.pos.y;
   }
