@@ -15,6 +15,7 @@ class Game implements Scene {
     background(0);
     textAlign(CENTER, CENTER);
     textSize(50);
+    fill(255);
     text("Game", width/2, height/2);
   }
 

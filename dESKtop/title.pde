@@ -11,7 +11,8 @@ class Title implements Scene {
     background(0);
     textAlign(CENTER, CENTER);
     textSize(50);
-    text("Title", width/2, height/2);
+    text("Title", width/2, height/2-30);
+    text("Click to Start", width/2, height/2+30);
   }
 
   void keyPressed() {
@@ -23,5 +24,6 @@ class Title implements Scene {
   }
 
   void mousePressed() {
+    app.changeScene(1);
   }
 }
