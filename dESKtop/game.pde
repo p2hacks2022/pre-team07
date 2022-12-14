@@ -5,6 +5,8 @@ class Game implements Scene {
   Enemy enemy;
   String playData;
 
+  final int CAMERA_RANGE_X = 24;
+  final int CAMERA_RANGE_Y = 15;
   Game() {
   }
 
@@ -38,5 +40,9 @@ class Game implements Scene {
   void showMap() {
     int posX = player.pos.x;
     int posY = player.pos.y;
+    for (int i = 0; i < CAMERA_RANGE_X; i++) {
+      for (int j = 0; j) {
+      }
+    }
   }
 }
