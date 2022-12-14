@@ -34,6 +34,7 @@ class App {
       if (transitionStartTime+TRANSITION_TIME <= millis()) {
         // sceneChangeFlag = false にすることでelseの方が実行されトランジションが終了する
         sceneChangeFlag = false;
+        setupFlag = true;
       }
     } else {
       sceneList[scene].draw();
@@ -44,7 +45,6 @@ class App {
   void changeScene(int n) {
     transitionStartTime = millis();
     sceneChangeFlag = true;
-    setupFlag = true;
     scene = n;
   }
 
