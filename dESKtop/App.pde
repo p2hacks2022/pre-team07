@@ -53,6 +53,7 @@ class App {
     background(0);
     textAlign(CENTER, CENTER);
     textSize(50);
+    fill(255);
     text("Transition", width/2, height/2);
   }
 
