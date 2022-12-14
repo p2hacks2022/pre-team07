@@ -13,6 +13,11 @@ class Game implements Scene {
   }
 
   void keyPressed() {
+    if (keyCode == LEFT) {
+      app.changeScene(1);
+    } else if (keyCode == RIGHT) {
+      app.changeScene(3);
+    }
   }
 
   void mousePressed() {

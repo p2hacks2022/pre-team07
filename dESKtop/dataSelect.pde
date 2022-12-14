@@ -16,7 +16,7 @@ class DataSelect implements Scene {
     if (keyCode == LEFT) {
       app.changeScene(0);
     } else if (keyCode == RIGHT) {
-      app.changeScene(1);
+      app.changeScene(2);
     }
   }
 

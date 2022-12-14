@@ -15,6 +15,11 @@ class Ending implements Scene {
   }
 
   void keyPressed() {
+    if (keyCode == LEFT) {
+      app.changeScene(2);
+    } else if (keyCode == RIGHT) {
+      app.changeScene(0);
+    }
   }
 
   void mousePressed() {

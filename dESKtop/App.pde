@@ -13,8 +13,7 @@ class App {
       new Title(), 
       new DataSelect(), 
       new Game(), 
-      new Ending(), 
-      new Transition()
+      new Ending()
     };
     // トランジションのセットアップ用フラグ
     sceneChangeFlag = false;
@@ -57,16 +56,15 @@ class App {
     text("Transition", width/2, height/2);
   }
 
-  // デバッグ用
+  // デバッグ用（トランジションは発生しない）
   void keyPressed() {
-    // 左右ともにTransitionは飛ばすようにしてある
     // 左矢印を押すと Ending -> Game -> DateSelect -> Title の順で遷移していく
     if (keyCode == 'L') {
-      scene = --scene < 0 ?  sceneList.length-2 : scene;
+      scene = --scene < 0 ?  sceneList.length-1 : scene;
     }
     // 右矢印を押すと Title -> DataSelect -> Game -> Ending の順で遷移していく
     else if (keyCode == 'R') {
-      scene = ++scene > sceneList.length-2 ?  0 : scene;
+      scene = ++scene > sceneList.length-1 ?  0 : scene;
     }
     sceneList[scene].keyPressed();
   }
