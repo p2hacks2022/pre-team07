@@ -1,5 +1,5 @@
 class Game implements Scene {
-  int[][] map;
+  Table map;
   Player player;
   ArrayList<Npc> npcs;
   Enemy enemy;
@@ -30,13 +30,11 @@ class Game implements Scene {
   }
   
   void loadMap(int mapNum){
-    String[] lines = loadStrings("map"+mapNum+".csv");
-    for (int i = 0; i < lines.length; i++){
-      String line = lines[i];
-      char[] chars = line.toCharArray();
-      for (int j = 0; j < chars.length; j++){
-        width / lines.lengthchars[j];
-      }
-    }
+    map = loadTable("map"+mapNum+".csv");
+  }
+  
+  void showMap(){
+    int posX = player.pos.x;
+    int posY = player.pos.y;
   }
 }
