@@ -8,11 +8,10 @@ class Title implements Scene {
   }
 
   void draw() {
-    background(0);
-    textAlign(CENTER, CENTER);
-    textSize(50);
-    text("Title", width/2, height/2-30);
-    text("Click to Start", width/2, height/2+30);
+    textSize(128);
+    fill(0, 0, 0);
+    text("Title", 250,200);
+    textSize(256);
   }
 
   void keyPressed() {
