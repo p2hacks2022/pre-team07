@@ -11,6 +11,13 @@ class Game implements Scene {
   }
 
   void setup() {
+    loadMap(playData);
+  }
+
+  void loadMap(String _playData) {
+    if (_playData == "saveData1") {
+      map = loadTable("map1.csv");
+    }
   }
 
   void draw() {
@@ -33,16 +40,21 @@ class Game implements Scene {
   void mousePressed() {
   }
 
-  void loadMap(int mapNum) {
-    map = loadTable("map"+mapNum+".csv");
+  class Adventure {
+    Adventure() {
+    }
+    void showMap() {
+      int posX = player.pos.x;
+      int posY = player.pos.y;
+      for (int i = 0; i < CAMERA_RANGE_X; i++) {
+        for (int j = 0; j < CAMERA_RANGE_Y; j++) {
+        }
+      }
+    }
   }
 
-  void showMap() {
-    int posX = player.pos.x;
-    int posY = player.pos.y;
-    for (int i = 0; i < CAMERA_RANGE_X; i++) {
-      for (int j = 0; j < CAMERA_RANGE_Y; j++) {
-      }
+  class Battle {
+    Battle() {
     }
   }
 }
