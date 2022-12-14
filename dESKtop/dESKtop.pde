@@ -6,9 +6,6 @@ void setup() {
 }
 
 void draw() {
-<<<<<<< HEAD
-  new Title().draw();
-=======
   app.run();
 }
 
@@ -18,5 +15,4 @@ void keyPressed() {
 
 void mousePressed() {
   app.mousePressed();
->>>>>>> dbcf342560ad9d01073450d49be407e6609db6ea
 }
