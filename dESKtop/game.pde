@@ -41,7 +41,7 @@ class Game implements Scene {
     int posX = player.pos.x;
     int posY = player.pos.y;
     for (int i = 0; i < CAMERA_RANGE_X; i++) {
-      for (int j = 0; j) {
+      for (int j = 0; j < CAMERA_RANGE_Y; j++) {
       }
     }
   }
