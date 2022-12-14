@@ -10,7 +10,6 @@ class Game implements Scene {
   }
 
   void setup() {
-    println(playData);
   }
 
   void draw() {
@@ -18,7 +17,8 @@ class Game implements Scene {
     textAlign(CENTER, CENTER);
     textSize(50);
     fill(255);
-    text("Game", width/2, height/2);
+    text("Game", width/2, height/2-30);
+    text("Play:"+playData, width/2, height/2+30);
   }
 
   void keyPressed() {

@@ -1,5 +1,4 @@
 class DataSelect implements Scene {
-  Game game;
   Button[] button;
   String dataName;
 
@@ -21,7 +20,6 @@ class DataSelect implements Scene {
     button[1].visible(true);
     button[2].visible(true);
     this.dataName = "";
-    game = (dESKtop.Game)app.sceneList[2];
   }
 
   void draw() {
@@ -44,7 +42,7 @@ class DataSelect implements Scene {
         button[0].visible(false);
         button[1].visible(false);
         button[2].visible(false);
-        load();//
+        setPlayData(dataName);
         app.changeScene(2);
         println("play [" + dataName + "]");
       }
@@ -61,6 +59,10 @@ class DataSelect implements Scene {
     }
   }
 
+  void setPlayData(String playData) {
+    ((dESKtop.Game)app.sceneList[2]).playData = playData;
+  }
+
   void keyPressed() {
     if (keyCode == LEFT) {
       app.changeScene(0);
@@ -70,9 +72,5 @@ class DataSelect implements Scene {
   }
 
   void mousePressed() {
-  }
-
-  void load() {
-    game.playData = dataName;
   }
 }
