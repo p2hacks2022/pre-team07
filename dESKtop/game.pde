@@ -3,12 +3,14 @@ class Game implements Scene {
   Player player;
   ArrayList<Npc> npcs;
   Enemy enemy;
+  String playData;
   
   Game() {
     
   }
 
   void setup() {
+    println(playData);
   }
 
   void draw() {
