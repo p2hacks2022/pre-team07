@@ -9,6 +9,7 @@ class App {
     // 1(ms)なので1000で1秒
     final long TRANSITION_TIME = 2000;
     long transitionStartTime;
+    PFont font;
 
     App() {
         textLib = new TextLib();
@@ -18,6 +19,8 @@ class App {
             new Game(), 
             new Ending()
         };
+        font = createFont("PixelMplus10-Regular.ttf", 12);
+        textFont(font);
     }
 
     void run() {
