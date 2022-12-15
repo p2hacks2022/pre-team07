@@ -26,18 +26,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-/*----------------------------------------
- クリック時の処理：clickButtonEvent関数を実行
- clickButtonEvent(this.buttonName);
- ----------------------------------------*/
+PApplet papplet = this;
 
-PApplet papplet = this;  // mainのPApplet
-
-public class Button {
+public class KKBTN {
   // ボタンの設定のインスタンス生成
   Set set;
-  // clickButtonEventの場所
-  Object obj;
+  // mainクラスのメソッド
+  Object obj = null;
   // ボタンをクリックされたときにclickButtonEventの引数に渡される文字列
   String buttonName;
   // ボタンクリックとマウスクリックに関するフラグ
@@ -104,8 +99,7 @@ public class Button {
           break;
         default:
           println("Warning:Invalid Align");
-          noLoop();
-          return;
+          throw new RuntimeException();
         }
         switch(this.vertical) {
         case CENTER:
@@ -119,8 +113,7 @@ public class Button {
           break;
         default:
           println("Warning:Invalid Align");
-          noLoop();
-          return;
+          throw new RuntimeException();
         }
       }
     }
@@ -130,12 +123,13 @@ public class Button {
   }
 
   // ボタンのコンストラクタ
-  Button(Object obj, String _buttonName, float _x, float _y, float _w, float _h, float _r) {
+  KKBTN(Object obj, String _buttonName, float _x, float _y, float _w, float _h, float _r) {
     papplet.registerMethod("draw", this);
     this.obj = obj;
+
     this.buttonName = _buttonName;
     // 初期値の設定
-    this.set = new Set();
+    set = new Set();
     this.set.position(_x, _y);
     this.set.size(_w, _h, _r);
     this.set.buttonColor(200, 0);
@@ -149,14 +143,9 @@ public class Button {
     this.visible = true;
   }
 
-  void delete() {
-    papplet.unregisterMethod("draw", this);
-  }
-
   // ボタン表示関数
   void draw() {
     if (!visible) return;
-
     push();
 
     // ボタン自体（ラベル以外）を表示
@@ -165,27 +154,9 @@ public class Button {
     this.lavelShow();
 
     // ボタンがクリックされたかを判別
-    if (this.checkButtonClick()) {
-      try {
-        Method m = this.obj.getClass().getDeclaredMethod("clickButtonEvent", String.class);
-        m.invoke(this.obj, buttonName);
-      }
-      catch (NoSuchMethodException e) {
-        println("Error: No function clickButtonEvent()");
-        // throw new RuntimeException(e);
-      }
-      catch(NullPointerException e) {
-        println("Error: No function clickButtonEvent()");
-        // throw new RuntimeException(e);
-      }
-      catch (IllegalAccessException e) {
-        throw new RuntimeException(e);
-      }
-      catch (InvocationTargetException e) {
-        //throw new RuntimeException(e);
-      }
+    if (checkButtonClick()) {
       // クリックされたらclickButtonEvent関数を実行
-      //.clickButtonEvent(this.buttonName);
+      this.excution(this.buttonName);
     }
 
     pop();
@@ -193,8 +164,10 @@ public class Button {
 
   // ボタン表示関数（ラベル以外）
   void buttonShow() {
+    // ホバーしてないときの色
     if (!checkHover())
       fill(this.set.rectColor);
+    // ホバー時の色
     else
       fill(this.set.rectHoverColor);
     stroke(this.set.rectEdgeColor);
@@ -238,6 +211,27 @@ public class Button {
       this.clickFlag = mousePressed;
 
     return return_flag;
+  }
+
+  void excution(String methodName) {
+    try {
+      Method m = this.obj.getClass().getDeclaredMethod(methodName);
+      m.invoke(this.obj);
+    }
+    catch (NoSuchMethodException e) {
+      println("Error: No function", methodName, "()");
+      // throw new RuntimeException(e);
+    }
+    catch(NullPointerException e) {
+      println("Error: No function", methodName, "()");
+      // throw new RuntimeException(e);
+    }
+    catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
+    catch (InvocationTargetException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   void visible(boolean disp) {
