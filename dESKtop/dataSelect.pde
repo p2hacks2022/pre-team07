@@ -10,7 +10,7 @@ class DataSelect implements Scene {
     this.button[1] = new Button(this, "delete", width / 2 + 15, height - 100, 300, 50, 0);
     this.button[1].set.lavel("Delete", 20);
     this.button[1].visible(false);
-    this.button[2] = new Button(this, "saveData1", width*0.1 + 20, 170, width*0.8 - 40, 60, 0);
+    this.button[2] = new Button(this, "saveData1", width * 0.1 + 20, 170, width * 0.8 - 40, 60, 0);
     this.button[2].set.lavel("SaveData1", 20);
     this.button[2].visible(false);
   }
@@ -28,7 +28,7 @@ class DataSelect implements Scene {
     textSize(50);
     text("DataSelect", width / 2, 100);
     fill(255);
-    rect(width*0.1, 150, width*0.8, 200);
+    rect(width * 0.1, 150, width * 0.8, 200);
     fill(0);
     textSize(20);
     text(dataName, width / 2, 300);
@@ -54,7 +54,7 @@ class DataSelect implements Scene {
   //ボタンが押された際に実行される
   void delete() {
     if (dataName != "") {
-      println("[" + dataName +"] deleteed");
+      println("[" + dataName + "] deleteed");
       dataName = "";
     }
   }
