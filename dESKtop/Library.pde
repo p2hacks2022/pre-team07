@@ -28,7 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 
 PApplet papplet = this;
 
-public class KKBTN {
+public class Button {
   // ボタンの設定のインスタンス生成
   Set set;
   // mainクラスのメソッド
@@ -123,7 +123,7 @@ public class KKBTN {
   }
 
   // ボタンのコンストラクタ
-  KKBTN(Object obj, String _buttonName, float _x, float _y, float _w, float _h, float _r) {
+  Button(Object obj, String _buttonName, float _x, float _y, float _w, float _h, float _r) {
     papplet.registerMethod("draw", this);
     this.obj = obj;
 

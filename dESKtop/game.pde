@@ -4,7 +4,7 @@ class Game implements Scene {
   ArrayList<Npc> npcs;
   Enemy enemy;
   String playData;
-
+  Battle battle;
   final int CAMERA_RANGE_X = 24;
   final int CAMERA_RANGE_Y = 15;
   Game() {
@@ -12,6 +12,7 @@ class Game implements Scene {
 
   void setup() {
     loadMap(playData);
+    battle = new Battle();
   }
 
   void loadMap(String _playData) {
@@ -34,7 +35,7 @@ class Game implements Scene {
       app.changeScene(1);
     } else if (keyCode == RIGHT) {
       app.changeScene(3);
-    }
+    };
   }
 
   void mousePressed() {
@@ -54,7 +55,49 @@ class Game implements Scene {
   }
 
   class Battle {
+    int phase = 0;
+    //trueのとき物理防御falseのとき魔法防御
+    boolean guardType;
+    //trueのとき物理攻撃falseのとき魔法攻撃
+    boolean attackType;
+    Button[] buttons;
     Battle() {
+      print(enemy);
+      buttons = new Button[]{
+        new Button(this, "A", 50, height - 100, 70, 70, 10), 
+        new Button(this, "B", width - 200, height - 100, 70, 70, 10), 
+        new Button(this, "X", 50, height - 100, 70, 70, 10), 
+        new Button(this, "Y", width - 200, height - 100, 70, 70, 10)
+      };
+      buttons[2].visible(false);
+      buttons[3].visible(false);
+    }
+    
+    void A() {
+       println("click A"); 
+    }
+
+    void clickButtonEvent(String e) {
+      switch (phase) {
+      case 0:
+        switch (e) {
+        case "A":
+          guardType = true;
+          break;
+        case "B":
+          guardType = false;
+          break;
+        }
+        break;
+      case 1:
+        switch (e) {
+        case "X":
+          break;
+        case "Y":
+          break;
+        }
+        break;
+      }
     }
   }
 }
