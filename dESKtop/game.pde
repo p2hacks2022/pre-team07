@@ -17,7 +17,7 @@ class Game implements Scene {
 
   void loadMap(String _playData) {
     if (_playData == "saveData1") {
-      map = loadTable("map1.csv");
+      //map = loadTable("map1.csv");
     }
   }
 
@@ -76,28 +76,14 @@ class Game implements Scene {
     void A() {
        println("click A"); 
     }
-
-    void clickButtonEvent(String e) {
-      switch (phase) {
-      case 0:
-        switch (e) {
-        case "A":
-          guardType = true;
-          break;
-        case "B":
-          guardType = false;
-          break;
-        }
-        break;
-      case 1:
-        switch (e) {
-        case "X":
-          break;
-        case "Y":
-          break;
-        }
-        break;
-      }
+    void B() {
+       println("click B"); 
+    }
+    void X() {
+       println("click X"); 
+    }
+    void Y() {
+       println("click Y"); 
     }
   }
 }
