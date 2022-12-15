@@ -1,8 +1,11 @@
 class App {
   TextLib textLib;
   Scene[] sceneList;
-  int scene;
-  boolean setupFlag, sceneChangeFlag;
+  int scene = 0;
+  // シーン遷移するごとにsetupFlagをtrueにする
+  boolean setupFlag = true;
+  // トランジションのセットアップ用フラグ
+  boolean sceneChangeFlag = false;
   // 1(ms)なので1000で1秒
   final long TRANSITION_TIME = 2000;
   long transitionStartTime;
@@ -15,11 +18,6 @@ class App {
       new Game(), 
       new Ending()
     };
-    // トランジションのセットアップ用フラグ
-    sceneChangeFlag = false;
-    // シーン遷移するごとにsetupFlagをtrueにする
-    setupFlag = true;
-    scene = 0;
   }
 
   void run() {

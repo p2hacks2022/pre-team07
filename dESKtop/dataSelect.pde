@@ -1,9 +1,8 @@
 class DataSelect implements Scene {
-  Button[] button;
+  Button[] button = new Button[3];
   String dataName;
 
   DataSelect() {
-    this.button = new Button[3];
     this.button[0] = new Button(this, "play", width / 2 - 325, height - 100, 300, 50, 0);
     this.button[0].set.lavel("Play", 20);
     this.button[0].visible(false);

@@ -36,22 +36,33 @@ public class Button {
   // ボタンをクリックされたときにclickButtonEventの引数に渡される文字列
   String buttonName;
   // ボタンクリックとマウスクリックに関するフラグ
-  boolean clickFlag, clickOldOnFlag, clickOnFlag;
+  boolean clickFlag = false;
+  boolean clickOldOnFlag = false;
+  boolean clickOnFlag = false;
   // 表示フラグ
-  boolean visible;
+  boolean visible = true;
 
   // ボタンの設定クラス
   class Set {
     // x座標, y座標, 幅, 高さ, 角丸の半径
-    float x, y, width, height, radius;
+    float x;
+    float y;
+    float width;
+    float height;
+    float radius;
     // ラベルの位置 X, Y, ラベルの文字サイズ
-    float lavelX, lavelY, lavelSize;
+    float lavelX;
+    float lavelY;
+    float lavelSize = 1;
     // Align beside:x軸, vertical:y軸
     int beside, vertical;
     // ラベルの文字
     String textLavel;
     // ボタンの中の色, ボタンの外枠の色, ラベルの色
-    color rectColor, rectEdgeColor, rectHoverColor, textColor;
+    color rectColor;
+    color rectEdgeColor;
+    color rectHoverColor;
+    color textColor;
 
     // ボタンの設定のコンストラクタ
     Set() {
@@ -137,10 +148,6 @@ public class Button {
     this.set.lavelColor(0);
     this.set.lavel("", 0);
     this.set.align(CENTER, CENTER);
-    this.clickFlag = false;
-    this.clickOldOnFlag = false;
-    this.clickOnFlag = false;
-    this.visible = true;
   }
 
   // ボタン表示関数
@@ -165,11 +172,13 @@ public class Button {
   // ボタン表示関数（ラベル以外）
   void buttonShow() {
     // ホバーしてないときの色
-    if (!checkHover())
+    if (!checkHover()) {
       fill(this.set.rectColor);
+    }
     // ホバー時の色
-    else
+    else {
       fill(this.set.rectHoverColor);
+    }
     stroke(this.set.rectEdgeColor);
     rect(this.set.x, this.set.y, this.set.width, this.set.height, this.set.radius);
   }
