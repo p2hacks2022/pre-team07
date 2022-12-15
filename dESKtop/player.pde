@@ -1,19 +1,28 @@
 class Player {
-  Player() {
-  }
-
-  abstract class Inventory {
-    Inventory() {
-    }
-  }
+  String name;
+  PVectorInt pos;
+  Inventory inventory;
+  int hp;
   
-  class Item extends Inventory{
-    Item() {
-    }
+  Player() {
+    inventory = new Inventory();
   }
 
-  class Weapon extends Inventory{
-    Weapon() {
+  class Inventory {
+    ArrayList<Item> item;
+    ArrayList<Weapon> weapon;
+
+    Inventory() {
+      item = new ArrayList<Item>();
+      weapon = new ArrayList<Weapon>();
     }
+  }
+}
+
+class PVectorInt {
+  int x, y;
+  PVectorInt(int _x, int _y) {
+    this.x = _x;
+    this.y = _y;
   }
 }

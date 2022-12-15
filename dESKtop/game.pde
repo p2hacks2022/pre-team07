@@ -6,9 +6,18 @@ class Game implements Scene {
   }
 
   void draw() {
+    background(0);
+    textAlign(CENTER, CENTER);
+    textSize(50);
+    text("Game", width/2, height/2);
   }
 
   void keyPressed() {
+    if (keyCode == LEFT) {
+      app.changeScene(1);
+    } else if (keyCode == RIGHT) {
+      app.changeScene(3);
+    }
   }
 
   void mousePressed() {
