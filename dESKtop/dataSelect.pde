@@ -54,8 +54,8 @@ class DataSelect implements Scene {
   //ボタンが押された際に実行される
   void delete() {
     if (dataName != "") {
+	  dataName = "";
       println("[" + dataName + "] deleteed");
-      dataName = "";
     }
   }
 
