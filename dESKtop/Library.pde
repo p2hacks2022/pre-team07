@@ -53,9 +53,10 @@ public class Button {
     // ラベルの位置 X, Y, ラベルの文字サイズ
     float lavelX;
     float lavelY;
-    float lavelSize = 1;
+    float lavelSize;
     // Align beside:x軸, vertical:y軸
-    int beside, vertical;
+    int beside;
+    int vertical;
     // ラベルの文字
     String textLavel;
     // ボタンの中の色, ボタンの外枠の色, ラベルの色
@@ -146,7 +147,7 @@ public class Button {
     this.set.buttonColor(200, 0);
     this.set.buttonHoverColor(255);
     this.set.lavelColor(0);
-    this.set.lavel("", 0);
+    this.set.lavel("", 1);
     this.set.align(CENTER, CENTER);
   }
 

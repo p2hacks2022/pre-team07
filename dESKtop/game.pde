@@ -1,17 +1,18 @@
 class Game implements Scene {
   Table map;
   Player player;
-  ArrayList<Npc> npcs;
   Enemy enemy;
   String playData;
 
   final int CAMERA_RANGE_X = 24;
   final int CAMERA_RANGE_Y = 15;
+  
   Game() {
   }
 
   void setup() {
-    loadMap(playData);
+    //loadMap(playData);
+    loadMap("saveData1");
   }
 
   void loadMap(String _playData) {
@@ -43,11 +44,13 @@ class Game implements Scene {
   class Adventure {
     Adventure() {
     }
+    
     void showMap() {
       int posX = player.pos.x;
       int posY = player.pos.y;
       for (int i = 0; i < CAMERA_RANGE_X; i++) {
         for (int j = 0; j < CAMERA_RANGE_Y; j++) {
+          
         }
       }
     }

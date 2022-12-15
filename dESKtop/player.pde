@@ -1,21 +1,10 @@
 class Player {
   String name;
   PVectorInt pos;
-  Inventory inventory;
   int hp;
   
   Player() {
-    inventory = new Inventory();
-  }
-
-  class Inventory {
-    ArrayList<Item> item;
-    ArrayList<Weapon> weapon;
-
-    Inventory() {
-      item = new ArrayList<Item>();
-      weapon = new ArrayList<Weapon>();
-    }
+    
   }
 }
 
