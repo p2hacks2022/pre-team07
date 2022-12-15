@@ -4,13 +4,13 @@ class DataSelect implements Scene {
 
   DataSelect() {
     this.button = new Button[3];
-    this.button[0] = new Button(this, "Play", width / 2 - 325, height - 100, 300, 50, 0);
+    this.button[0] = new Button(this, "play", width / 2 - 325, height - 100, 300, 50, 0);
     this.button[0].set.lavel("Play", 20);
     this.button[0].visible(false);
-    this.button[1] = new Button(this, "Delete", width / 2 + 15, height - 100, 300, 50, 0);
+    this.button[1] = new Button(this, "delete", width / 2 + 15, height - 100, 300, 50, 0);
     this.button[1].set.lavel("Delete", 20);
     this.button[1].visible(false);
-    this.button[2] = new Button(this, "SaveData1", width*0.1 + 20, 170, width*0.8 - 40, 60, 0);
+    this.button[2] = new Button(this, "saveData1", width*0.1 + 20, 170, width*0.8 - 40, 60, 0);
     this.button[2].set.lavel("SaveData1", 20);
     this.button[2].visible(false);
   }
@@ -35,27 +35,27 @@ class DataSelect implements Scene {
   }
 
   //ボタンが押された際に実行される
-  void clickButtonEvent(String e) {
-    switch(e) {
-    case "Play":
-      if (dataName != "") {
-        button[0].visible(false);
-        button[1].visible(false);
-        button[2].visible(false);
-        setPlayData(dataName);
-        app.changeScene(2);
-        println("play [" + dataName + "]");
-      }
-      break;
-    case "SaveData1":
-      dataName = e;
-      break;
-    case "Delete":
-      if (dataName != "") {
-        println("[" + dataName +"] deleteed");
-        dataName = "";
-      }
-      break;
+  void play() {
+    if (dataName != "") {
+      button[0].visible(false);
+      button[1].visible(false);
+      button[2].visible(false);
+      setPlayData(dataName);
+      app.changeScene(2);
+      println("play [" + dataName + "]");
+    }
+  }
+
+  //ボタンが押された際に実行される
+  void saveData1() {
+    dataName = "saveData1";
+  }
+
+  //ボタンが押された際に実行される
+  void delete() {
+    if (dataName != "") {
+      println("[" + dataName +"] deleteed");
+      dataName = "";
     }
   }
 
