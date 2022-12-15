@@ -1,4 +1,1 @@
-class Npc {
-  Npc() {
-  }
-}
+

@@ -1,4 +1,4 @@
-class Enemy {
-  Enemy() {
-  }
+class Enemy extends CharacterBase {
+    Enemy() {
+    }
 }

@@ -1,28 +1,17 @@
-class Player {
-  String name;
-  PVectorInt pos;
-  Inventory inventory;
-  int hp;
-  
-  Player() {
-    inventory = new Inventory();
-  }
+class Player extends CharacterBase {
+    //enum型が使えなかったのでStringで代用
+    
+    String name;
+    PVectorInt pos;
 
-  class Inventory {
-    ArrayList<Item> item;
-    ArrayList<Weapon> weapon;
-
-    Inventory() {
-      item = new ArrayList<Item>();
-      weapon = new ArrayList<Weapon>();
+    Player() {
     }
-  }
 }
 
 class PVectorInt {
-  int x, y;
-  PVectorInt(int _x, int _y) {
-    this.x = _x;
-    this.y = _y;
-  }
+    int x, y;
+    PVectorInt(int _x, int _y) {
+        this.x = _x;
+        this.y = _y;
+    }
 }
