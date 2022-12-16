@@ -3,18 +3,21 @@ class Game implements Scene {
     Player player;
     Enemy enemy;
     String playData;
-    Battle battle;
-    final int CAMERA_RANGE_X = 24;
-    final int CAMERA_RANGE_Y = 15;
+    GameScene[] gameScenes;
+    int sceneNum = 0;
+    
     Game() {
     }
 
     void setup() {
         player = new Player();
         enemy = new Enemy();
-        battle = new Battle();
+        gameScenes = new GameScene[]{
+            new Battle(), 
+            new Adventure()
+        };
     }
-
+    
     void loadMap(String _playData) {
         if (_playData == "saveData1") {
             //map = loadTable("map1.csv");
@@ -27,7 +30,7 @@ class Game implements Scene {
         fill(255);
         text("Game", width/2, height/2-30);
         text("Play:"+playData, width/2, height/2+30);
-        battle.draw();
+        gameScenes[sceneNum].draw();
     }
 
     void keyPressed() {
@@ -41,20 +44,26 @@ class Game implements Scene {
     void mousePressed() {
     }
 
-    class Adventure {
+    abstract class GameScene implements Scene {
+        GameScene() {}
+        void setup() {}
+        void draw() {}
+        void keyPressed() {}
+        void mousePressed() {}
+    }
+
+    class Adventure extends GameScene {
         Adventure() {
         }
         void showMap() {
-            int posX = player.pos.x;
-            int posY = player.pos.y;
-            for (int i = 0; i < CAMERA_RANGE_X; i++) {
-                for (int j = 0; j < CAMERA_RANGE_Y; j++) {
-                }
-            }
         }
+        void setup() {}
+        void draw() {}
+        void keyPressed() {}
+        void mousePressed() {}
     }
 
-    class Battle {
+    class Battle extends GameScene {
         final float SELF_DAMAGE_RATE = 0.1;
         PImage panel;
         int phase = 0;
@@ -72,6 +81,8 @@ class Game implements Scene {
             };
             setVisibleXY(false);
         }
+        
+        void setup() {}
 
         void draw() {
             background(0);
@@ -98,6 +109,9 @@ class Game implements Scene {
                 break;
             }
         }
+        
+        void keyPressed() {}
+        void mousePressed() {}
 
         void setVisibleXY(boolean isVisible) {
             buttons[2].visible(isVisible);
@@ -139,8 +153,17 @@ class Game implements Scene {
             setVisibleXY(false);
             enemyActionSelect();
             action(player, enemy);
+            
             action(enemy, player);
             phase = 2;
+            
+        }
+        
+        boolean judgeFinish(){
+            if (enemy.hp<=0) {
+                sceneNum = 0;
+            }else if (){
+            }
         }
 
         void enemyActionSelect() {
