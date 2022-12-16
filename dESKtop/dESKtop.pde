@@ -1,18 +1,18 @@
 App app;
 
 void setup() {
-  size(800, 500);
-  app = new App();
+    size(850, 550);
+    app = new App();
 }
 
 void draw() {
-  app.run();
+    app.run();
 }
 
 void keyPressed() {
-  app.keyPressed();
+    app.keyPressed();
 }
 
 void mousePressed() {
-  app.mousePressed();
+    app.mousePressed();
 }

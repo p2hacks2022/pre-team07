@@ -1,4 +1,4 @@
 class Enemy {
-  Enemy() {
-  }
+    Enemy() {
+    }
 }
