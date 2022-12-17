@@ -341,6 +341,7 @@ class Game implements Scene {
         }
 
         void setup() {
+            textLib = new TextLib("防御方法を選んでください", width / 2, height - 80, 0.1, 0);
             buttons = new Button[]{
                 new Button(this, "localGuard", 100, height - 120, 80, 80, 10), 
                 new Button(this, "remoteGuard", width - 180, height - 120, 80, 80, 10), 
@@ -374,13 +375,14 @@ class Game implements Scene {
                 fill(255, 0, 0);
                 text("- あなたのターン -", width / 2, height - 159);
                 fill(255);
-                textLib.drawAnimationTextInterval(text, width / 2, height - 70, 0.05);
+                textLib.drawAnimationTextInterval(text, width / 2, height - 80, 0.05);
                 break;
             case 3:
+                delay(50);
                 fill(255, 0, 0);
                 text("- 敵のターン -", width / 2, height - 159);
                 fill(255);
-                textLib.drawAnimationTextInterval(text, width / 2, height - 70, 0.05);
+                textLib.drawAnimationTextInterval(text, width / 2, height - 80, 0.05);
                 break;
             }
         }
@@ -427,6 +429,7 @@ class Game implements Scene {
             enemy.actionSelect();
             boolean first = random(1) < 0.5;
             actionPrepare(first);
+            
             actionPrepare(!first);
             phase = 0;
         }

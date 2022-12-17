@@ -259,36 +259,47 @@ public class TextLib {
     String textStack = "";
     int index;
 
-    TextLib() {
+    String text;
+    float x;
+    float y;
+    float time;
+    int mode;
+
+    //mode = 1のときdurationの時間内でテキストを表示する
+    //mode = 2のとき1文字あたりintervalの時間でテキストを表示する
+    TextLib(String _text, float _x, float _y, float _time, int _mode) {
+        this.text = _text;
+        this.x = _x;
+        this.y = _y;
+        this.time = _time;
+        this.mode = _mode;
     }
 
-    //drawで呼んで
-    //durationの時間内でテキストを表示する
-    void drawAnimationTextTimer(String text, float x, float y, float duration) {
-        drawAnimationText(text, x, y, duration*1000 / (text.length() - 1));
+    void draw() {
+        switch (mode) {
+        case 0:
+            drawAnimationText(time*1000 / (text.length() - 1));
+            break;
+        case 1:
+            drawAnimationText(time*1000);
+            break;
+        }
     }
-    
-    //drawで呼んで
-    //1文字あたりintervalの時間でテキストを表示する
-    void drawAnimationTextInterval(String text, float x, float y, float interval) {
-        drawAnimationText(text, x, y, interval*1000);
-    }
-    
+
     //クラス外から呼ばないでほしい
-    private void drawAnimationText(String text, float x, float y, float time) {
+    private void drawAnimationText(float _time) {
         if (!isSetComplete) {
             startTime = millis();
             index = 0;
             isSetComplete = true;
         }
-        if (index < text.length() && millis() - startTime >= time * index) {
+        if (index < text.length() && millis() - startTime >= _time * index) {
             charArray = text.toCharArray();
             textStack += charArray[index];
             text(textStack, x - textWidth(text) / 2 + textWidth(textStack) / 2, y);
             index++;
-        }
-        else{
-            if (index == text.length()){
+        } else {
+            if (index == text.length()) {
                 textStack = "";
                 isSetComplete = false;
             }

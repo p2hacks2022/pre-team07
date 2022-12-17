@@ -13,7 +13,6 @@ class App {
     PFont font;
 
     App() {
-        textLib = new TextLib();
         sceneList = new Scene[] {
             new Title(), 
             new DataSelect(), 
