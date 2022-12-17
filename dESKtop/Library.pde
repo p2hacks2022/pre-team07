@@ -147,7 +147,7 @@ public class Button {
         this.set.buttonColor(200, 0);
         this.set.buttonHoverColor(255);
         this.set.lavelColor(0);
-        this.set.lavel("", 1);
+        this.set.lavel(_buttonName, 20);
         this.set.align(CENTER, CENTER);
     }
 
