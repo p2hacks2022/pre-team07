@@ -2,6 +2,7 @@ import processing.video.*;
 
 class Game implements Scene {
     Player player;
+    Enemy[] enemies;
     Enemy enemy;
     String playData;
     Table map;
@@ -28,13 +29,23 @@ class Game implements Scene {
 
     void setup() {
         floorNum = 1;
+        player = new Player();
+        player.pos = new PVectorInt(int(CAMERA_RANGE_X / 2.0), int(CAMERA_RANGE_Y / 2.0));
+        player.vec = new PVectorInt(0, 0);
+        enemies = new Enemy[]{
+            new Enemy("zako", 64, 100, 150), 
+            new Enemy("hutuu", 256, 50, 200), 
+            new Enemy("tyubosu", 512, 100, 300), 
+            new Enemy("rasubosu", 512, 150, 400), 
+            new Enemy("rasubosu2", 512, 200, 500), 
+        };
         gameScenes = new GameScene[]{
             new Adventure(), 
             new Battle(), 
             new GameOver()
         };
-        enemy = new Enemy("teki");
         sceneNum = 0;
+        gameSceneChange(0);
     }
 
     void draw() {
@@ -382,7 +393,8 @@ class Game implements Scene {
             if (random(100) < enemyProbability) {
                 moveFlag = false;
                 moveStep = 0;
-                println("enemy");
+                enemy = new Enemy(enemies[(int)random(3)]);
+                gameSceneChange(1);
             }
         }
     }
@@ -393,7 +405,7 @@ class Game implements Scene {
         int phase = 0;
         String text;
         Button[] buttons;
-        TextLib textLib = new TextLib();
+        TextLib textLib;
         Movie[] movies;
 
         Battle() {
@@ -408,6 +420,7 @@ class Game implements Scene {
         }
 
         void setup() {
+            textLib = new TextLib("防御方法を選んでください", width / 2, height - 80, 0.1, 0);
             buttons = new Button[]{
                 new Button(this, "localGuard", 100, height - 120, 80, 80, 10), 
                 new Button(this, "remoteGuard", width - 180, height - 120, 80, 80, 10), 
@@ -416,7 +429,6 @@ class Game implements Scene {
             };
             for (Button button : buttons) {
                 button.set.align(CENTER, TOP);
-                button.visible(false);
             }
             setVisibleXY(false);
         }
@@ -430,25 +442,26 @@ class Game implements Scene {
                 fill(255, 0, 0);
                 text("- 防御選択 -", width / 2, height - 159);
                 fill(255);
-                textLib.drawAnimationTextTimer("防御方法を選んでください", width / 2 - 120, height - 70, 0.5);
+                // textLib.drawAnimationTextInterval("防御方法を選んでください", width / 2, height - 80, 0.1);
                 break;
             case 1:
                 fill(255, 0, 0);
-                text("- 攻撃選択 -", width / 2, height - 150);
+                text("- 攻撃選択 -", width / 2, height - 159);
                 fill(255);
-                textLib.drawAnimationTextTimer("攻撃方法を選んでください", width / 2, height - 70, 0.5);
+                // textLib.drawAnimationTextInterval("攻撃方法を選んでください", width / 2, height - 80, 0.1);
                 break;
             case 2:
                 fill(255, 0, 0);
-                text("- あなたのターン -", width / 2, height - 150);
+                text("- あなたのターン -", width / 2, height - 159);
                 fill(255);
-                text(text, width / 2, height - 70);
+                // textLib.drawAnimationTextInterval(text, width / 2, height - 80, 0.05);
                 break;
             case 3:
+                delay(50);
                 fill(255, 0, 0);
-                text("- 敵のターン -", width / 2, height - 150);
+                text("- 敵のターン -", width / 2, height - 159);
                 fill(255);
-                text(text, width / 2, height - 70);
+                // textLib.drawAnimationTextInterval(text, width / 2, height - 80, 0.05);
                 break;
             }
         }
@@ -493,20 +506,32 @@ class Game implements Scene {
         void finishButton() {
             setVisibleXY(false);
             enemy.actionSelect();
-            action(player, enemy);
-            judgeFinish();
-            phase = 2;
-            action(enemy, player);
-            judgeFinish();
-            phase = 3;
+            boolean first = random(1) < 0.5;
+            actionPrepare(first);
+            
+            actionPrepare(!first);
             phase = 0;
+        }
+        
+        void actionPrepare(boolean act){
+            if (act) {
+                action(player, enemy);
+                judgeFinish();
+                phase = 2;
+            } else {
+                action(enemy, player);
+                judgeFinish();
+                phase = 3;
+            }
         }
 
         void judgeFinish() {
             if (enemy.hp <= 0) {
-                sceneNum = 0;
+                gameSceneChange(0);
+                println("toAdventure");
             } else if (player.hp <= 0) {
-                sceneNum = 3;
+                gameSceneChange(3);
+                println("gameOver");
             }
         }
 

@@ -2,7 +2,7 @@ class App {
     TextLib textLib;
     Scene[] sceneList;
     // 0:title, 1:selectData, 2:game, 3:ending
-    int scene = 2;
+    int scene = 0;
     // シーン遷移するごとにsetupFlagをfalseにする
     boolean setupFlag = true;
     // トランジションのセットアップ用フラグ
@@ -13,7 +13,6 @@ class App {
     PFont font;
 
     App() {
-        textLib = new TextLib();
         sceneList = new Scene[] {
             new Title(), 
             new DataSelect(), 
