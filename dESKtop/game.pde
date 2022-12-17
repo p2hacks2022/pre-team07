@@ -21,11 +21,11 @@ class Game implements Scene {
         player.pos = new PVectorInt(int(CAMERA_RANGE_X / 2.0), int(CAMERA_RANGE_Y / 2.0));
         player.vec = new PVectorInt(0, 0);
         enemies = new Enemy[]{
-            new Enemy("zako", 64, 100, 150),
-            new Enemy("hutuu", 256, 50, 200),
-            new Enemy("tyubosu", 512, 100, 300),
-            new Enemy("rasubosu", 512, 150, 400),
-            new Enemy("rasubosu2", 512, 200, 500),
+            new Enemy("zako", 64, 100, 150), 
+            new Enemy("hutuu", 256, 50, 200), 
+            new Enemy("tyubosu", 512, 100, 300), 
+            new Enemy("rasubosu", 512, 150, 400), 
+            new Enemy("rasubosu2", 512, 200, 500), 
         };
         gameScenes = new GameScene[]{
             new Adventure(), 
@@ -425,13 +425,22 @@ class Game implements Scene {
         void finishButton() {
             setVisibleXY(false);
             enemy.actionSelect();
-            action(player, enemy);
-            judgeFinish();
-            phase = 2;
-            action(enemy, player);
-            judgeFinish();
-            phase = 3;
+            boolean first = random(1) < 0.5;
+            actionPrepare(first);
+            actionPrepare(!first);
             phase = 0;
+        }
+        
+        void actionPrepare(boolean act){
+            if (act) {
+                action(player, enemy);
+                judgeFinish();
+                phase = 2;
+            } else {
+                action(enemy, player);
+                judgeFinish();
+                phase = 3;
+            }
         }
 
         void judgeFinish() {
