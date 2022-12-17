@@ -16,7 +16,8 @@ class App {
         sceneList = new Scene[] {
             new Title(), 
             new DataSelect(), 
-            new Game(), 
+            new Game(),
+            new GameOver(),
             new Ending()
         };
         font = createFont("PixelMplus10-Regular.ttf", 12);

@@ -5,7 +5,7 @@ class Game implements Scene {
     String playData;
     GameScene[] gameScenes;
     int sceneNum = 0;
-    
+
     Game() {
     }
 
@@ -17,7 +17,7 @@ class Game implements Scene {
             new Adventure()
         };
     }
-    
+
     void loadMap(String _playData) {
         if (_playData == "saveData1") {
             //map = loadTable("map1.csv");
@@ -45,11 +45,16 @@ class Game implements Scene {
     }
 
     abstract class GameScene implements Scene {
-        GameScene() {}
-        void setup() {}
-        void draw() {}
-        void keyPressed() {}
-        void mousePressed() {}
+        GameScene() {
+        }
+        void setup() {
+        }
+        void draw() {
+        }
+        void keyPressed() {
+        }
+        void mousePressed() {
+        }
     }
 
     class Adventure extends GameScene {
@@ -57,10 +62,14 @@ class Game implements Scene {
         }
         void showMap() {
         }
-        void setup() {}
-        void draw() {}
-        void keyPressed() {}
-        void mousePressed() {}
+        void setup() {
+        }
+        void draw() {
+        }
+        void keyPressed() {
+        }
+        void mousePressed() {
+        }
     }
 
     class Battle extends GameScene {
@@ -72,46 +81,59 @@ class Game implements Scene {
         Button[] buttons;
         Battle() {
             panel = loadImage("panel.png");
-            panel.resize(600, 180);
+            panel.resize(300, 180);
             buttons = new Button[]{
-                new Button(this, "localGuard", 170, height - 120, 80, 80, 10), 
-                new Button(this, "remoteGuard", width - 250, height - 120, 80, 80, 10), 
-                new Button(this, "localAttack", 170, height - 120, 80, 80, 10), 
-                new Button(this, "remoteAttack", width - 250, height - 120, 80, 80, 10)
+                new Button(this, "localGuard", 100, height - 120, 80, 80, 10), 
+                new Button(this, "remoteGuard", width - 180, height - 120, 80, 80, 10), 
+                new Button(this, "localAttack", 100, height - 120, 80, 80, 10), 
+                new Button(this, "remoteAttack", width - 180, height - 120, 80, 80, 10)
             };
+            for (Button button : buttons){
+                //button.set.label(button.getButtonName, 12);
+                button.set.align(CENTER, TOP);
+            }
             setVisibleXY(false);
         }
-        
-        void setup() {}
+
+        void setup() {
+        }
 
         void draw() {
             background(0);
-            image(panel, 100, height-180);
+            image(panel, 250, height-180);
             textSize(20);
             switch(phase) {
             case 0:
                 fill(255, 0, 0);
-                text("- GUARD READY? -", width/2, height-158);
+                text("- 防御選択 -", width/2, height-158);
                 fill(255);
-                text("CHOOSE GUARD SKILL!", width/2, height-80);
+                text("防御方法を選んでください", width/2, height-80);
                 break;
             case 1:
                 fill(255, 0, 0);
-                text("- ATTACK READY? -", width/2, height-158);
+                text("- 攻撃選択 -", width/2, height-158);
                 fill(255);
-                text("CHOOSE ATTACK SKILL!", width/2, height-80);
+                text("攻撃方法を選んでください", width/2, height-80);
                 break;
             case 2:
                 fill(255, 0, 0);
-                text("- ATTACK TURN -", width/2, height-158);
+                text("- あなたのターン -", width/2, height-158);
+                fill(255);
+                text(text, width/2, height-80);
+                break;
+            case 3:
+                fill(255, 0, 0);
+                text("- 敵のターン -", width/2, height-158);
                 fill(255);
                 text(text, width/2, height-80);
                 break;
             }
         }
-        
-        void keyPressed() {}
-        void mousePressed() {}
+
+        void keyPressed() {
+        }
+        void mousePressed() {
+        }
 
         void setVisibleXY(boolean isVisible) {
             buttons[2].visible(isVisible);
@@ -153,16 +175,17 @@ class Game implements Scene {
             setVisibleXY(false);
             enemyActionSelect();
             action(player, enemy);
-            
+            judgeFinish();
             action(enemy, player);
+            judgeFinish();
             phase = 2;
-            
         }
-        
-        boolean judgeFinish(){
-            if (enemy.hp<=0) {
+
+        void judgeFinish() {
+            if (enemy.hp <= 0) {
                 sceneNum = 0;
-            }else if (){
+            } else if (player.hp <= 0) {
+                sceneNum = 3;
             }
         }
 
@@ -177,18 +200,18 @@ class Game implements Scene {
                 if (guard.guardType == "localGuard") {
                     //ダメージなし
                     guard.hp -= 0;
-                    text = "NO DAMAGE";
+                    text = guard.name+"は攻撃を防いだ";
                 } else if (guard.guardType == "remoteGuard") {
                     guard.hp -= decideDamage(attack);
-                    text = "DAMAGE";
+                    text = guard.name+"に"+decideDamage(attack)+"GBダメージ与えた";
                 }
             } else if (attack.attackType == "remoteAttack") {
                 if (guard.guardType == "localGuard") {
                     guard.hp -= decideDamage(attack);
-                    text = "DAMAGE";
+                    text = guard.name+"に"+decideDamage(attack)+"GBダメージ与えた";
                 } else if (guard.guardType == "remoteGuard") {
                     guard.hp += decideDamage(attack);
-                    text = "ABSORBED DAMAGE";
+                    text = guard.name+"は攻撃を吸収した";
                 }
             }
         }

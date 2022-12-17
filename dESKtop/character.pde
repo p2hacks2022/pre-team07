@@ -1,4 +1,5 @@
 class CharacterBase {
+    String name;
     int hp;
     int powerUpper;
     int powerLower;

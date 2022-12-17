@@ -13,12 +13,6 @@ public static class Easing {
     }
 }
 
-class TextLib {
-    TextLib() {
-    }
-}
-
-
 //--------------------------------------------------------------------------------------
 // 以下ボタンライブラリ
 
@@ -51,13 +45,13 @@ public class Button {
         float height;
         float radius;
         // ラベルの位置 X, Y, ラベルの文字サイズ
-        float lavelX;
-        float lavelY;
-        float lavelSize = 1;
-        // Align beside:x軸, vertical:y軸
-        int beside, vertical;
+        float labelX;
+        float labelY;
+        float labelSize = 1;
+        // Align horizontal:x軸, vertical:y軸
+        int horizontal, vertical;
         // ラベルの文字
-        String textLavel="";
+        String textlabel="";
         // ボタンの中の色, ボタンの外枠の色, ラベルの色
         color rectColor;
         color rectEdgeColor;
@@ -72,7 +66,7 @@ public class Button {
         void position(float _x, float _y) {
             this.x = _x;
             this.y = _y;
-            this.lavelPos();
+            this.labelPos();
         }
         void size(float _w, float _h, float _r) {
             this.width = _w;
@@ -86,27 +80,27 @@ public class Button {
         void buttonHoverColor(color _rectHoverColor) {
             this.rectHoverColor = _rectHoverColor;
         }
-        void lavel(String _text, float _lavelSize) {
-            this.textLavel = _text;
-            this.lavelSize = _lavelSize;
-            this.lavelPos();
+        void label(String _text, float _labelSize) {
+            this.textlabel = _text;
+            this.labelSize = _labelSize;
+            this.labelPos();
         }
-        void align(int _beside, int _vertical) {
-            this.beside = _beside;
+        void align(int _horizontal, int _vertical) {
+            this.horizontal = _horizontal;
             this.vertical = _vertical;
-            this.lavelPos();
+            this.labelPos();
         }
-        void lavelPos() {
-            if (this.lavelSize > 0) {
-                switch(this.beside) {
+        void labelPos() {
+            if (this.labelSize > 0) {
+                switch(this.horizontal) {
                 case CENTER:
-                    this.lavelX = this.x + this.width/2;
+                    this.labelX = this.x + this.width/2;
                     break;
                 case LEFT:
-                    this.lavelX = this.x;
+                    this.labelX = this.x;
                     break;
                 case RIGHT:
-                    this.lavelX = this.x + this.width;
+                    this.labelX = this.x + this.width;
                     break;
                 default:
                     println("Warning:Invalid Align");
@@ -114,13 +108,13 @@ public class Button {
                 }
                 switch(this.vertical) {
                 case CENTER:
-                    this.lavelY = this.y + this.height/2;
+                    this.labelY = this.y + this.height/2;
                     break;
                 case TOP:
-                    this.lavelY = this.y;
+                    this.labelY = this.y;
                     break;
                 case BOTTOM:
-                    this.lavelY = this.y + this.height;
+                    this.labelY = this.y + this.height;
                     break;
                 default:
                     println("Warning:Invalid Align");
@@ -128,7 +122,7 @@ public class Button {
                 }
             }
         }
-        void lavelColor(color _tectColor) {
+        void labelColor(color _tectColor) {
             this.textColor = _tectColor;
         }
     }
@@ -145,8 +139,8 @@ public class Button {
         this.set.size(_w, _h, _r);
         this.set.buttonColor(200, 0);
         this.set.buttonHoverColor(255);
-        this.set.lavelColor(0);
-        this.set.lavel("", 1);
+        this.set.labelColor(0);
+        this.set.label("", 1);
         this.set.align(CENTER, CENTER);
     }
 
@@ -158,7 +152,7 @@ public class Button {
         // ボタン自体（ラベル以外）を表示
         this.buttonShow();
         // ラベルを表示
-        this.lavelShow();
+        this.labelShow();
 
         // ボタンがクリックされたかを判別
         if (checkButtonClick()) {
@@ -184,11 +178,11 @@ public class Button {
     }
 
     // ラベル表示関数
-    void lavelShow() {
+    void labelShow() {
         fill(this.set.textColor);
-        textAlign(this.set.beside, this.set.vertical);
-        textSize(this.set.lavelSize);
-        text(this.set.textLavel, this.set.lavelX, this.set.lavelY);
+        textAlign(this.set.horizontal, this.set.vertical);
+        textSize(this.set.labelSize);
+        text(this.set.textlabel, this.set.labelX, this.set.labelY);
     }
 
     // マウスがボタンにホバーしてるかの判別関数
@@ -249,4 +243,24 @@ public class Button {
 }
 
 // ここまでボタンライブラリ
+//--------------------------------------------------------------------------------------
+// 以下テキストライブラリ
+
+public class TextLib {
+    float animationSpeed = 1;
+    
+    TextLib() {
+    }
+    
+    void setAnimationSpeed(float animationSpeed){
+        this.animationSpeed = animationSpeed;
+    }
+    
+    void showText(String text){
+        char[] chars = text.toCharArray();
+        //text(3,);
+    }
+}
+
+// ここまでテキストライブラリ
 //--------------------------------------------------------------------------------------
