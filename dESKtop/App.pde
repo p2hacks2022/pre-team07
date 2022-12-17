@@ -1,24 +1,42 @@
 class App {
     TextLib textLib;
     Scene[] sceneList;
+<<<<<<< HEAD
     // 0:title, 1:selectData, 2:game, 3:ending
     int scene = 2;
     // シーン遷移するごとにsetupFlagをfalseにする
+=======
+    int scene = 2;
+    // シーン遷移するごとにsetupFlagをtrueにする
+>>>>>>> 050c88ac8dcd246d9de731802d1329a7dba2b275
     boolean setupFlag = true;
     // トランジションのセットアップ用フラグ
     boolean sceneChangeFlag = false;
     // 1(ms)なので1000で1秒
     final long TRANSITION_TIME = 2000;
     long transitionStartTime;
+<<<<<<< HEAD
+=======
+    PFont font;
+>>>>>>> 050c88ac8dcd246d9de731802d1329a7dba2b275
 
     App() {
         textLib = new TextLib();
         sceneList = new Scene[] {
             new Title(), 
             new DataSelect(), 
+<<<<<<< HEAD
             new Game(), 
             new Ending()
         };
+=======
+            new Game(),
+            new GameOver(),
+            new Ending()
+        };
+        font = createFont("PixelMplus10-Regular.ttf", 12);
+        textFont(font);
+>>>>>>> 050c88ac8dcd246d9de731802d1329a7dba2b275
     }
 
     void run() {

@@ -4,6 +4,7 @@ class DataSelect implements Scene {
 
     DataSelect() {
         this.button[0] = new Button(this, "play", width / 2 - 325, height - 100, 300, 50, 0);
+<<<<<<< HEAD
         this.button[0].set.lavel("Play", 20);
         this.button[0].visible(false);
         this.button[1] = new Button(this, "delete", width / 2 + 15, height - 100, 300, 50, 0);
@@ -11,6 +12,15 @@ class DataSelect implements Scene {
         this.button[1].visible(false);
         this.button[2] = new Button(this, "saveData1", width * 0.1 + 20, 170, width * 0.8 - 40, 60, 0);
         this.button[2].set.lavel("SaveData1", 20);
+=======
+        this.button[0].set.label("Play", 20);
+        this.button[0].visible(false);
+        this.button[1] = new Button(this, "delete", width / 2 + 15, height - 100, 300, 50, 0);
+        this.button[1].set.label("Delete", 20);
+        this.button[1].visible(false);
+        this.button[2] = new Button(this, "saveData1", width * 0.1 + 20, 170, width * 0.8 - 40, 60, 0);
+        this.button[2].set.label("SaveData1", 20);
+>>>>>>> 050c88ac8dcd246d9de731802d1329a7dba2b275
         this.button[2].visible(false);
     }
 
