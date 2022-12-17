@@ -5,6 +5,17 @@ class Game implements Scene {
     Enemy enemy;
     String playData;
     Table map;
+    int floorNum;
+    int[] floorMapTotal = new int[]{2, 2, 3};
+    String[] floorMapName = new String[]{
+        "アプリケーション層", 
+        "プレゼンテーション層", 
+        "セットアップ層", 
+        "トランスポート層", 
+        "ネットワーク層", 
+        "データリンク層", 
+        "物理層"
+    };
     GameScene[] gameScenes;
     int sceneNum;
     boolean gameSceneSetupFlag = true;
@@ -16,16 +27,13 @@ class Game implements Scene {
     }
 
     void setup() {
-        sceneNum = 0;
-        player = new Player();
-        player.pos = new PVectorInt(int(CAMERA_RANGE_X / 2.0), int(CAMERA_RANGE_Y / 2.0));
-        player.vec = new PVectorInt(0, 0);
-        enemy = new Enemy("teki");
+        floorNum = 1;
         gameScenes = new GameScene[]{
             new Adventure(), 
             new Battle(), 
             new GameOver()
         };
+        enemy = new Enemy("teki");
         sceneNum = 0;
     }
 
@@ -88,28 +96,68 @@ class Game implements Scene {
         int targetY;
         // 移動中かどうかの判定
         boolean moveFlag;
+        // 鍵を持っているかの判定
+        boolean keyFlag;
         // 1方向目の移動中か
         int moveDirectCount;
         int moveStep;
         // 敵が出現する確率(0~100%で指定)
-        float enemyProbability = 7;
+        float enemyProbability = 5;
 
         Adventure() {
-            // loadMap(playData);
+            setup();
+        }
+
+        void setup() {
+            player = new Player();
             loadMap("saveData1");
             mapRow = map.getRowCount();
             mapCol = map.getColumnCount();
+            player.pos = new PVectorInt(getMapNum(8)[1], getMapNum(8)[0]);
+            player.vec = new PVectorInt(0, 0);
+            player.hp = 100;
             moveFlag = false;
+            keyFlag = false;
         }
 
         void draw() {
             drawMap();
             drawCursor(mouseX, mouseY);
+            drawKeyFrame();
+            if (keyFlag) {
+                drawKey();
+            }
             update();
         }
 
         void mousePressed() {
             setTarget(mouseX, mouseY);
+        }
+
+        int[] getMapNum(int n) {
+            for (int i=0; i<mapRow; i++) {
+                for (int j=0; j<mapCol; j++) {
+                    if (map.getInt(i, j) == n) {
+                        return new int[]{i, j};
+                    }
+                }
+            }
+            println("NullError");
+            return null;
+        }
+
+        void drawKeyFrame() {
+            push();
+            fill(0, 150);
+            strokeWeight(3);
+            stroke(255);
+            rect(25, 25, 50, 50);
+            pop();
+        }
+
+        void drawKey() {
+            fill(240, 240, 0);
+            circle(50, 50, 20);
         }
 
         void update() {
@@ -120,7 +168,7 @@ class Game implements Scene {
 
         void loadMap(String _playData) {
             if (_playData == "saveData1") {
-                map = loadTable("Map1_1a.csv");
+                map = loadTable("Map"+str(player.field)+"_"+str(floorNum)+"a.csv");
             }
         }
 
@@ -274,6 +322,11 @@ class Game implements Scene {
             return - 1;
         }
 
+        void getKey(int x, int y) {
+            map.setInt(x, y, player.field);
+            keyFlag = true;
+        }
+
         void movePlayer() {
             if (frameCount % 10 != 0) {
                 return;
@@ -282,8 +335,10 @@ class Game implements Scene {
             // 縦方向移動
             if (moveStep == 1) {
                 int move = map.getInt(player.pos.y + player.vec.y, player.pos.x);
-                if (aboutBlock(move) ==  1)
+                int block = aboutBlock(move);
+                if (!(2<=block && block<=3)) {
                     player.pos.y += player.vec.y;
+                }
                 if (player.pos.y == targetY || aboutBlock(move) == 2 || aboutBlock(move) == 3) {
                     moveStep = 2;
                     moveDirectCount++;
@@ -292,12 +347,31 @@ class Game implements Scene {
             // 横方向移動
             else if (moveStep == 2) {
                 int move = map.getInt(player.pos.y, player.pos.x +  + player.vec.x);
-                if (aboutBlock(move) ==  1)
+                int block = aboutBlock(move);
+                if (!(2<=block && block<=3)) {
                     player.pos.x += player.vec.x;
+                }
                 if (player.pos.x == targetX || aboutBlock(move) == 2 || aboutBlock(move) == 3) {
                     moveStep = 1;
                     moveDirectCount++;
                 }
+            }
+            switch(map.getInt(player.pos.y, player.pos.x)) {
+                // 鍵ゲット
+            case -1:
+                moveStep = 1;
+                moveDirectCount++;
+                getKey(player.pos.y, player.pos.x);
+                break;
+                // ゴールに到着
+            case 9:
+                if (keyFlag) {
+                    moveStep = 1;
+                    moveDirectCount++;
+                    floorNum++;
+                    gameSceneChange(0);
+                }
+                break;
             }
             if (2 <= moveDirectCount) {
                 moveFlag = false;

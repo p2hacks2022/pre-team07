@@ -58,6 +58,7 @@ public class Button {
         color rectEdgeColor;
         color rectHoverColor;
         color textColor;
+        PImage img=null;
 
         // ボタンの設定のコンストラクタ
         Set() {
@@ -68,6 +69,9 @@ public class Button {
             this.x = _x;
             this.y = _y;
             this.labelPos();
+        }
+        void bgImage(PImage _img) {
+            img = _img;
         }
         void size(float _w, float _h, float _r) {
             this.width = _w;
@@ -150,7 +154,9 @@ public class Button {
 
     // ボタン表示関数
     void draw() {
-        if (!visible) return;
+        if (!visible) {
+            return;
+        }
         push();
 
         // ボタン自体（ラベル以外）を表示
@@ -177,8 +183,14 @@ public class Button {
         else {
             fill(this.set.rectHoverColor);
         }
-        stroke(this.set.rectEdgeColor);
-        rect(this.set.x, this.set.y, this.set.width, this.set.height, this.set.radius);
+        if(this.set.img == null) {
+            stroke(this.set.rectEdgeColor);
+            rect(this.set.x, this.set.y, this.set.width, this.set.height, this.set.radius);
+        }
+        else {
+            image(this.set.img, this.set.x, this.set.y, this.set.width, this.set.height);
+        }
+        
     }
 
     // ラベル表示関数
