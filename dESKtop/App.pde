@@ -17,7 +17,7 @@ class App {
         sceneList = new Scene[] {
             new Title(), 
             new DataSelect(), 
-            new Game(),
+            new Game(), 
             new Ending()
         };
         font = createFont("PixelMplus10-Regular.ttf", 12);
@@ -73,6 +73,8 @@ class App {
     }
 
     void mousePressed() {
-        sceneList[scene].mousePressed();
+        if (!sceneChangeFlag) {
+            sceneList[scene].mousePressed();
+        }
     }
 }
