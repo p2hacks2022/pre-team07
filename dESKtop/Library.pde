@@ -270,8 +270,8 @@ public class TextLib {
     
     //drawで呼んで
     //1文字あたりintervalの時間でテキストを表示する
-    void drawAnimationInterval(String text, float x, float y, float interval) {
-        drawAnimationText(text, x, y, interval);
+    void drawAnimationTextInterval(String text, float x, float y, float interval) {
+        drawAnimationText(text, x, y, interval*1000);
     }
     
     //クラス外から呼ばないでほしい
@@ -281,18 +281,19 @@ public class TextLib {
             index = 0;
             isSetComplete = true;
         }
-        push();
-        textAlign(LEFT);
         if (index < text.length() && millis() - startTime >= time * index) {
             charArray = text.toCharArray();
             textStack += charArray[index];
-            text(textStack, x, y);
+            text(textStack, x - textWidth(text) / 2 + textWidth(textStack) / 2, y);
             index++;
         }
         else{
-            text(textStack, x, y);
+            if (index == text.length()){
+                textStack = "";
+                isSetComplete = false;
+            }
+            text(textStack, x - textWidth(text) / 2 + textWidth(textStack) / 2, y);
         }
-        pop();
     }
 }
 
