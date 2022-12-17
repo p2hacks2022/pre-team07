@@ -1,7 +1,8 @@
+import processing.video.*;
+
 class Game implements Scene {
     Player player;
     Enemy enemy;
-    Adventure adventure;
     String playData;
     Table map;
     GameScene[] gameScenes;
@@ -11,19 +12,19 @@ class Game implements Scene {
     final int CAMERA_RANGE_Y = 11;
 
     Game() {
-        adventure = new Adventure();
     }
 
     void setup() {
-        sceneNum = 1;
         player = new Player();
         player.pos = new PVectorInt(int(CAMERA_RANGE_X / 2.0), int(CAMERA_RANGE_Y / 2.0));
         player.vec = new PVectorInt(0, 0);
-        enemy = new Enemy();
+        enemy = new Enemy("teki");
         gameScenes = new GameScene[]{
             new Adventure(), 
-            new Battle()
+            new Battle(), 
+            new GameOver()
         };
+        sceneNum = 1;
     }
 
     void draw() {
@@ -48,11 +49,12 @@ class Game implements Scene {
     }
 
     void mousePressed() {
-        adventure.setTarget(mouseX, mouseY);
+        gameScenes[sceneNum].mousePressed();
     }
 
     abstract class GameScene {
         GameScene() {
+            
         }
         void setup() {
         }
@@ -91,6 +93,10 @@ class Game implements Scene {
             drawMap();
             drawCursor(mouseX, mouseY);
             update();
+        }
+
+        void mousePressed() {
+            setTarget(mouseX, mouseY);
         }
 
         void update() {
@@ -292,10 +298,21 @@ class Game implements Scene {
         int phase = 0;
         String text;
         Button[] buttons;
+        TextLib textLib = new TextLib();
+        Movie[] movies;
 
         Battle() {
             panel = loadImage("panel.png");
             panel.resize(300, 180);
+            movies = new Movie[]{
+                new Movie(papplet, "ローカル攻撃.mp4"), 
+                new Movie(papplet, "リモートバリア.mp4"), 
+                new Movie(papplet, "ローカルバリア.mp4"), 
+                new Movie(papplet, "リモート攻撃.mp4")
+            };
+        }
+
+        void setup() {
             buttons = new Button[]{
                 new Button(this, "localGuard", 100, height - 120, 80, 80, 10), 
                 new Button(this, "remoteGuard", width - 180, height - 120, 80, 80, 10), 
@@ -303,43 +320,39 @@ class Game implements Scene {
                 new Button(this, "remoteAttack", width - 180, height - 120, 80, 80, 10)
             };
             for (Button button : buttons) {
-                //button.set.label(button.getButtonName, 12);
                 button.set.align(CENTER, TOP);
             }
             setVisibleXY(false);
         }
 
-        void setup() {
-        }
-
         void draw() {
             background(0);
-            image(panel, 250, height - 180);
+            image(panel, 275, height - 180);
             textSize(20);
             switch(phase) {
             case 0:
                 fill(255, 0, 0);
-                text("- 防御選択 -", width / 2, height - 158);
+                text("- 防御選択 -", width / 2, height - 159);
                 fill(255);
-                text("防御方法を選んでください", width / 2, height - 80);
+                textLib.drawAnimationText("防御方法を選んでください", width / 2 - 120, height - 70, 0.5);
                 break;
             case 1:
                 fill(255, 0, 0);
-                text("- 攻撃選択 -", width / 2, height - 158);
+                text("- 攻撃選択 -", width / 2, height - 150);
                 fill(255);
-                text("攻撃方法を選んでください", width / 2, height - 80);
+                text("攻撃方法を選んでください", width / 2, height - 70);
                 break;
             case 2:
                 fill(255, 0, 0);
-                text("- あなたのターン -", width / 2, height - 158);
+                text("- あなたのターン -", width / 2, height - 150);
                 fill(255);
-                text(text, width / 2, height - 80);
+                text(text, width / 2, height - 70);
                 break;
             case 3:
                 fill(255, 0, 0);
-                text("- 敵のターン -", width / 2, height - 158);
+                text("- 敵のターン -", width / 2, height - 150);
                 fill(255);
-                text(text, width / 2, height - 80);
+                text(text, width / 2, height - 70);
                 break;
             }
         }
@@ -355,13 +368,11 @@ class Game implements Scene {
         }
 
         void localGuard() {
-            println("click A"); 
             player.guardType = "localGuard";
             nextButton();
         }
 
         void remoteGuard() {
-            println("click B"); 
             player.guardType = "remoteGuard";
             nextButton();
         }
@@ -374,13 +385,11 @@ class Game implements Scene {
         }
 
         void localAttack() {
-            println("click X"); 
             player.attackType = "localAttack";
             finishButton();
         }
 
         void remoteAttack() {
-            println("click Y"); 
             player.attackType = "remoteAttack";
             finishButton();
         }
@@ -390,9 +399,11 @@ class Game implements Scene {
             enemyActionSelect();
             action(player, enemy);
             judgeFinish();
+            phase = 2;
             action(enemy, player);
             judgeFinish();
-            phase = 2;
+            phase = 3;
+            phase = 0;
         }
 
         void judgeFinish() {
@@ -432,6 +443,24 @@ class Game implements Scene {
 
         int decideDamage(CharacterBase attack) {
             return attack.powerLower + (int)random(attack.powerUpper + 1);
+        }
+    }
+
+    class GameOver extends GameScene {
+        
+        
+        GameOver() {
+        }
+        void setup() {
+        }
+
+        void draw() {
+        }
+
+        void keyPressed() {
+        }
+
+        void mousePressed() {
         }
     }
 }

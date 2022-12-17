@@ -2,7 +2,7 @@ class App {
     TextLib textLib;
     Scene[] sceneList;
     // 0:title, 1:selectData, 2:game, 3:ending
-    int scene = 2;
+    int scene = 0;
     // シーン遷移するごとにsetupFlagをfalseにする
     boolean setupFlag = true;
     // トランジションのセットアップ用フラグ
@@ -18,7 +18,6 @@ class App {
             new Title(), 
             new DataSelect(), 
             new Game(),
-            new GameOver(),
             new Ending()
         };
         font = createFont("PixelMplus10-Regular.ttf", 12);

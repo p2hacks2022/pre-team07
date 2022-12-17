@@ -1,6 +1,4 @@
 class Player extends CharacterBase {
-    //enum型が使えなかったのでStringで代用
-    String name;
     PVectorInt pos;
     PVectorInt vec;
     int hp;

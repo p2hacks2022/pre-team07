@@ -1,4 +1,5 @@
 class Enemy extends CharacterBase {
-    Enemy() {
+    Enemy(String name) {
+        super.name = name;
     }
 }

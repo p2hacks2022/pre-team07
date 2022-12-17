@@ -144,7 +144,7 @@ public class Button {
         this.set.buttonColor(200, 0);
         this.set.buttonHoverColor(255);
         this.set.labelColor(0);
-        this.set.label(_buttonName, 20);
+        this.set.label(_buttonName, 12);
         this.set.align(CENTER, CENTER);
     }
 
@@ -251,18 +251,36 @@ public class Button {
 // 以下テキストライブラリ
 
 public class TextLib {
-    float animationSpeed = 1;
-    
+    float animationTime;
+    boolean isSetComplete = false;
+    float startTime;
+    char[] charArray;
+    float textPos;
+    String textStack = "";
+    int index;
+
     TextLib() {
     }
-    
-    void setAnimationSpeed(float animationSpeed){
-        this.animationSpeed = animationSpeed;
-    }
-    
-    void showText(String text){
-        char[] chars = text.toCharArray();
-        //text(3,);
+
+    //drawで呼んで
+    void drawAnimationText(String text, float x, float y, float duration) {
+        if (!isSetComplete) {
+            startTime = millis();
+            index = 0;
+            isSetComplete = true;
+        }
+        push();
+        textAlign(LEFT);
+        if (index < text.length() && millis() - startTime >= duration*1000 / (text.length() - 1) * index) {
+            charArray = text.toCharArray();
+            textStack += charArray[index];
+            text(textStack, x, y);
+            index++;
+        }
+        else{
+            text(textStack, x, y);
+        }
+        pop();
     }
 }
 
