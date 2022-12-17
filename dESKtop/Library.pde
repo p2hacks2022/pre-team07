@@ -263,7 +263,19 @@ public class TextLib {
     }
 
     //drawで呼んで
-    void drawAnimationText(String text, float x, float y, float duration) {
+    //durationの時間内でテキストを表示する
+    void drawAnimationTextTimer(String text, float x, float y, float duration) {
+        drawAnimationText(text, x, y, duration*1000 / (text.length() - 1));
+    }
+    
+    //drawで呼んで
+    //1文字あたりintervalの時間でテキストを表示する
+    void drawAnimationInterval(String text, float x, float y, float interval) {
+        drawAnimationText(text, x, y, interval);
+    }
+    
+    //クラス外から呼ばないでほしい
+    private void drawAnimationText(String text, float x, float y, float time) {
         if (!isSetComplete) {
             startTime = millis();
             index = 0;
@@ -271,7 +283,7 @@ public class TextLib {
         }
         push();
         textAlign(LEFT);
-        if (index < text.length() && millis() - startTime >= duration*1000 / (text.length() - 1) * index) {
+        if (index < text.length() && millis() - startTime >= time * index) {
             charArray = text.toCharArray();
             textStack += charArray[index];
             text(textStack, x, y);

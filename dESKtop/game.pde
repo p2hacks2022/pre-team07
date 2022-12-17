@@ -334,13 +334,13 @@ class Game implements Scene {
                 fill(255, 0, 0);
                 text("- 防御選択 -", width / 2, height - 159);
                 fill(255);
-                textLib.drawAnimationText("防御方法を選んでください", width / 2 - 120, height - 70, 0.5);
+                textLib.drawAnimationTextTimer("防御方法を選んでください", width / 2 - 120, height - 70, 0.5);
                 break;
             case 1:
                 fill(255, 0, 0);
                 text("- 攻撃選択 -", width / 2, height - 150);
                 fill(255);
-                text("攻撃方法を選んでください", width / 2, height - 70);
+                textLib.drawAnimationTextTimer("攻撃方法を選んでください", width / 2, height - 70, 0.5);
                 break;
             case 2:
                 fill(255, 0, 0);
@@ -396,7 +396,7 @@ class Game implements Scene {
 
         void finishButton() {
             setVisibleXY(false);
-            enemyActionSelect();
+            enemy.actionSelect();
             action(player, enemy);
             judgeFinish();
             phase = 2;
@@ -412,11 +412,6 @@ class Game implements Scene {
             } else if (player.hp <= 0) {
                 sceneNum = 3;
             }
-        }
-
-        void enemyActionSelect() {
-            enemy.guardType = random(1) < 0.5 ? "localGuard" : "remoteGuard";
-            enemy.attackType = random(1) < 0.5 ? "localAttack" : "remoteAttack";
         }
 
         void action(CharacterBase attack, CharacterBase guard) {
