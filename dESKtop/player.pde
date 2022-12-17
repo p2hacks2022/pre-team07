@@ -1,19 +1,19 @@
-class Player {
-  Player() {
-  }
+class Player extends CharacterBase {
+    //enum型が使えなかったのでStringで代用
+    String name;
+    PVectorInt pos;
+    PVectorInt vec;
+    int hp;
+    
+    Player() {
+        this.name = "アステル";
+    }
+}
 
-  abstract class Inventory {
-    Inventory() {
+class PVectorInt {
+    int x, y;
+    PVectorInt(int _x, int _y) {
+        this.x = _x;
+        this.y = _y;
     }
-  }
-  
-  class Item extends Inventory{
-    Item() {
-    }
-  }
-
-  class Weapon extends Inventory{
-    Weapon() {
-    }
-  }
 }

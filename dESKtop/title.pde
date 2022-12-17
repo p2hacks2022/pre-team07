@@ -1,18 +1,29 @@
 // This tab is Title
 
 class Title implements Scene {
-  Title() {
-  }
+    Title() {
+    }
 
-  void setup() {
-  }
+    void setup() {
+    }
 
-  void draw() {
-  }
+    void draw() {
+        background(0);
+        textAlign(CENTER, CENTER);
+        textSize(50);
+        text("Title", width/2, height/2-30);
+        text("Click to Start", width/2, height/2+30);
+    }
 
-  void keyPressed() {
-  }
+    void keyPressed() {
+        if (keyCode == LEFT) {
+            app.changeScene(3);
+        } else if (keyCode == RIGHT) {
+            app.changeScene(1);
+        }
+    }
 
-  void mousePressed() {
-  }
+    void mousePressed() {
+        app.changeScene(1);
+    }
 }

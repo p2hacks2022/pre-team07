@@ -1,6 +1,6 @@
 interface Scene {
-   void setup();
-   void draw();
-   void keyPressed();
-   void mousePressed();
+    void setup();
+    void draw();
+    void keyPressed();
+    void mousePressed();
 }

@@ -1,17 +1,18 @@
-Scene[] scene;
-Scene nowScene;
+App app;
 
 void setup() {
-  scene = new Scene[] {
-     new Title(),
-     new DataSelect(),
-     new Game(),
-     new Ending()
-  };
-  nowScene = scene[0];
-  size(800, 500);  
+    size(850, 550);
+    app = new App();
 }
 
 void draw() {
-  nowScene.draw();
+    app.run();
+}
+
+void keyPressed() {
+    app.keyPressed();
+}
+
+void mousePressed() {
+    app.mousePressed();
 }
