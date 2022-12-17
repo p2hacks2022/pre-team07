@@ -1,14 +1,14 @@
 public static class Easing {
     // retは戻り値用変数 
     static float easeIn() {
-        float ret=0;
-
+        float ret = 0;
+        
         return ret;
     }
-
+    
     static float easeOut() {
-        float ret=0;
-
+        float ret = 0;
+        
         return ret;
     }
 }
@@ -35,7 +35,7 @@ public class Button {
     boolean clickOnFlag = false;
     // 表示フラグ
     boolean visible = true;
-
+    
     // ボタンの設定クラス
     class Set {
         // x座標, y座標, 幅, 高さ, 角丸の半径
@@ -52,14 +52,14 @@ public class Button {
         int horizontal;
         int vertical;
         // ラベルの文字
-        String textlabel="";
+        String textlabel = "";
         // ボタンの中の色, ボタンの外枠の色, ラベルの色
         color rectColor;
         color rectEdgeColor;
         color rectHoverColor;
         color textColor;
-        PImage img=null;
-
+        PImage img = null;
+        
         // ボタンの設定のコンストラクタ
         Set() {
             // テキストの初期Alignは（CENTER, CENTER）
@@ -101,30 +101,30 @@ public class Button {
         void labelPos() {
             if (this.labelSize > 0) {
                 switch(this.horizontal) {
-                case CENTER:
-                    this.labelX = this.x + this.width/2;
+                    case CENTER:
+                    this.labelX = this.x + this.width / 2;
                     break;
-                case LEFT:
+                    case LEFT:
                     this.labelX = this.x;
                     break;
-                case RIGHT:
+                    case RIGHT:
                     this.labelX = this.x + this.width;
                     break;
-                default:
+                    default:
                     println("Warning:Invalid Align");
                     throw new RuntimeException();
                 }
                 switch(this.vertical) {
-                case CENTER:
-                    this.labelY = this.y + this.height/2;
+                    case CENTER:
+                    this.labelY = this.y + this.height / 2;
                     break;
-                case TOP:
+                    case TOP:
                     this.labelY = this.y;
                     break;
-                case BOTTOM:
+                    case BOTTOM:
                     this.labelY = this.y + this.height;
                     break;
-                default:
+                    default:
                     println("Warning:Invalid Align");
                     throw new RuntimeException();
                 }
@@ -134,12 +134,12 @@ public class Button {
             this.textColor = _tectColor;
         }
     }
-
+    
     // ボタンのコンストラクタ
     Button(Object obj, String _buttonName, float _x, float _y, float _w, float _h, float _r) {
         papplet.registerMethod("draw", this);
         this.obj = obj;
-
+        
         this.buttonName = _buttonName;
         // 初期値の設定
         set = new Set();
@@ -151,28 +151,28 @@ public class Button {
         this.set.label(_buttonName, 12);
         this.set.align(CENTER, CENTER);
     }
-
+    
     // ボタン表示関数
     void draw() {
         if (!visible) {
             return;
         }
         push();
-
+        
         // ボタン自体（ラベル以外）を表示
         this.buttonShow();
         // ラベルを表示
         this.labelShow();
-
+        
         // ボタンがクリックされたかを判別
         if (checkButtonClick()) {
             // クリックされたらclickButtonEvent関数を実行
             this.excution(this.buttonName);
         }
-
+        
         pop();
     }
-
+    
     // ボタン表示関数（ラベル以外）
     void buttonShow() {
         // ホバーしてないときの色
@@ -183,7 +183,7 @@ public class Button {
         else {
             fill(this.set.rectHoverColor);
         }
-        if(this.set.img == null) {
+        if (this.set.img == null) {
             stroke(this.set.rectEdgeColor);
             rect(this.set.x, this.set.y, this.set.width, this.set.height, this.set.radius);
         }
@@ -192,7 +192,7 @@ public class Button {
         }
         
     }
-
+    
     // ラベル表示関数
     void labelShow() {
         fill(this.set.textColor);
@@ -200,20 +200,20 @@ public class Button {
         textSize(this.set.labelSize);
         text(this.set.textlabel, this.set.labelX, this.set.labelY);
     }
-
+    
     // マウスがボタンにホバーしてるかの判別関数
     boolean checkHover() {
-        if ( (mouseX > this.set.x && mouseX < this.set.x+this.set.width) &&
-            (mouseY > this.set.y && mouseY < this.set.y+this.set.height) ) {
+        if ((mouseX > this.set.x && mouseX < this.set.x + this.set.width) && 
+           (mouseY > this.set.y && mouseY < this.set.y + this.set.height)) {
             return true;
         }
         return false;
     }
-
+    
     // ボタンがクリックされたかの判別関数
     boolean checkButtonClick() {
         boolean return_flag = false;
-
+        
         if (!this.checkHover()) {
             this.clickOnFlag = false;
             this.clickOldOnFlag = false;
@@ -228,16 +228,16 @@ public class Button {
         }
         if (!this.clickOnFlag)
             this.clickFlag = mousePressed;
-
+        
         return return_flag;
     }
-
+    
     void excution(String methodName) {
         try {
             Method m = this.obj.getClass().getDeclaredMethod(methodName);
             m.invoke(this.obj);
         }
-        catch (NoSuchMethodException e) {
+        catch(NoSuchMethodException e) {
             println("Error: No function", methodName, "()");
             // throw new RuntimeException(e);
         }
@@ -245,14 +245,14 @@ public class Button {
             println("Error: No function", methodName, "()");
             // throw new RuntimeException(e);
         }
-        catch (IllegalAccessException e) {
+        catch(IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-        catch (InvocationTargetException e) {
+        catch(InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
-
+    
     void visible(boolean disp) {
         this.visible = disp;
     }
@@ -270,34 +270,52 @@ public class TextLib {
     float textPos;
     String textStack = "";
     int index;
-
+    boolean visible = false;
+    
     String text;
     float x;
     float y;
     float time;
     int mode;
-
+    
+    TextLib() {
+        papplet.registerMethod("draw", this);
+    }
+    
     //mode = 1のときdurationの時間内でテキストを表示する
     //mode = 2のとき1文字あたりintervalの時間でテキストを表示する
-    TextLib(String _text, float _x, float _y, float _time, int _mode) {
+    void setText(String _text, float _x, float _y, float _time, int _mode) {
+        if (visible){
+            return;
+        }
         this.text = _text;
         this.x = _x;
         this.y = _y;
         this.time = _time;
         this.mode = _mode;
+        setVisible(true);
+        textStack = "";
+        isSetComplete = false;
     }
-
+    
+    void setVisible(boolean _visible) {
+        this.visible = _visible;
+    }
+    
     void draw() {
-        switch (mode) {
-        case 0:
-            drawAnimationText(time*1000 / (text.length() - 1));
-            break;
-        case 1:
-            drawAnimationText(time*1000);
-            break;
+        if (!visible) {
+            return;
+        }
+        switch(mode) {
+            case 0:
+                drawAnimationText(time * 1000 / (text.length() - 1));
+                break;
+            case 1:
+                drawAnimationText(time * 1000);
+                break;
         }
     }
-
+    
     //クラス外から呼ばないでほしい
     private void drawAnimationText(float _time) {
         if (!isSetComplete) {
@@ -311,10 +329,6 @@ public class TextLib {
             text(textStack, x - textWidth(text) / 2 + textWidth(textStack) / 2, y);
             index++;
         } else {
-            if (index == text.length()) {
-                textStack = "";
-                isSetComplete = false;
-            }
             text(textStack, x - textWidth(text) / 2 + textWidth(textStack) / 2, y);
         }
     }

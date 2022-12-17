@@ -1,7 +1,9 @@
 App app;
+FileIO fileIO;
 
 void setup() {
     size(850, 550);
+    fileIO = new FileIO();
     app = new App();
 }
 
@@ -15,4 +17,8 @@ void keyPressed() {
 
 void mousePressed() {
     app.mousePressed();
+}
+
+void movieEvent(Movie m) {
+    m.read();
 }

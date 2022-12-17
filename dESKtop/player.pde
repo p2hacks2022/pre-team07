@@ -1,10 +1,10 @@
 class Player extends CharacterBase {
     PVectorInt pos;
     PVectorInt vec;
+    int floor;
     
     Player() {
         this.name = "アステル";
-        this.field = 1;
         this.hp = 1024;
         this.powerUpper = 300;
         this.powerLower = 100;

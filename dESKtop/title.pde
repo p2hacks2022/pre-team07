@@ -8,7 +8,7 @@ class Title implements Scene {
     }
 
     void draw() {
-        background(0);
+        image(fileIO.title, 0, 0, width, height);
         textAlign(CENTER, CENTER);
         textSize(50);
         text("Title", width/2, height/2-30);
