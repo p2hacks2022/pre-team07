@@ -5,7 +5,8 @@ class Game implements Scene {
     String playData;
     Table map;
     GameScene[] gameScenes;
-    int sceneNum = 0;
+    int sceneNum;
+    boolean gameSceneSetupFlag = true;
 
     final int CAMERA_RANGE_X = 17;
     final int CAMERA_RANGE_Y = 11;
@@ -15,7 +16,7 @@ class Game implements Scene {
     }
 
     void setup() {
-        sceneNum = 1;
+        sceneNum = 0;
         player = new Player();
         player.pos = new PVectorInt(int(CAMERA_RANGE_X / 2.0), int(CAMERA_RANGE_Y / 2.0));
         player.vec = new PVectorInt(0, 0);
@@ -27,8 +28,17 @@ class Game implements Scene {
     }
 
     void draw() {
+        if(gameSceneSetupFlag) {
+            gameScenes[sceneNum].setup();
+            gameSceneSetupFlag = false;
+        }
         background(0);
         gameScenes[sceneNum].draw();
+    }
+    
+    void gameSceneChange(int n) {
+        sceneNum = n;
+        gameSceneSetupFlag = true;
     }
 
     void keyPressed() {
@@ -48,7 +58,7 @@ class Game implements Scene {
     }
 
     void mousePressed() {
-        adventure.setTarget(mouseX, mouseY);
+        adventure.mousePressed();
     }
 
     abstract class GameScene {
@@ -79,15 +89,19 @@ class Game implements Scene {
         // 1方向目の移動中か
         int moveDirectCount;
         int moveStep;
+        // 敵が出現する確率(0~100%で指定)
+        float enemyProbability = 7;
 
         Adventure() {
             // loadMap(playData);
             loadMap("saveData1");
             mapRow = map.getRowCount();
             mapCol = map.getColumnCount();
+            moveFlag = false;
         }
 
         void draw() {
+            println(moveFlag);
             drawMap();
             drawCursor(mouseX, mouseY);
             update();
@@ -256,9 +270,10 @@ class Game implements Scene {
         }
 
         void movePlayer() {
-            if (frameCount % 10 != 1) {
+            if (frameCount % 10 != 0) {
                 return;
             }
+            
             // 縦方向移動
             if (moveStep == 1) {
                 int move = map.getInt(player.pos.y + player.vec.y, player.pos.x);
@@ -283,6 +298,17 @@ class Game implements Scene {
                 moveFlag = false;
                 moveStep = 0;
             }
+
+            // 敵出現
+            if(random(100) < enemyProbability) {
+                moveFlag = false;
+                moveStep = 0;
+                println("enemy");
+            }
+        }
+        
+        void mousePressed() {
+            setTarget(mouseX, mouseY);
         }
     }
 
@@ -305,6 +331,7 @@ class Game implements Scene {
             for (Button button : buttons) {
                 //button.set.label(button.getButtonName, 12);
                 button.set.align(CENTER, TOP);
+                button.visible(false);
             }
             setVisibleXY(false);
         }
