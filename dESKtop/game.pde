@@ -413,6 +413,7 @@ class Game implements Scene {
         float nowDuration;
         boolean first;
         boolean isMovieFinished = false;
+        boolean flag = false;
         Movie movie;
 
         Battle() {
@@ -432,6 +433,9 @@ class Game implements Scene {
                 button.set.align(CENTER, TOP);
             }
             setVisibleXY(false);
+            textLib.setVisible(false);
+            isMovieFinished = false;
+            flag = false;
         }
 
         void draw() {
@@ -452,9 +456,6 @@ class Game implements Scene {
                 textLib.setText("攻撃方法を選んでください", width / 2, height - 80, 0.1, 0);
                 break;
             case 2:
-            
-                    print("you : ");
-                    println(millis() - startTime);
                 if (!isMovieFinished && startTime+nowDuration < millis()) {
                     movie = fileIO.movies[getIndex(enemy.guardType)];
                     movie.play();
@@ -463,9 +464,15 @@ class Game implements Scene {
                     isMovieFinished = true;
                 } else if (isMovieFinished && startTime+nowDuration < millis()) {
                     isMovieFinished = false;
-                    actionPrepare(!first);
                     setVisibleAB(true);
-                    phase = 0;
+                    if (!flag){
+                        actionPrepare(!first);
+                        flag = true;
+                    }else{
+                        flag = false;
+                        textLib.setVisible(false);
+                        phase = 0;
+                    }
                 } else {
                     image(movie, 0, 0);
                     fill(255, 0, 0);
@@ -475,8 +482,6 @@ class Game implements Scene {
                 }
                 break;
             case 3:
-            print("teki : ");
-                    println(millis() - startTime);
                 if (!isMovieFinished && startTime+nowDuration < millis()) {
                     movie = fileIO.movies[getIndex(enemy.guardType)];
                     movie.play();
@@ -484,9 +489,15 @@ class Game implements Scene {
                     isMovieFinished = true;
                 } else if (isMovieFinished && startTime+nowDuration < millis()) {
                     isMovieFinished = false;
-                    actionPrepare(!first);
                     setVisibleAB(true);
-                    phase = 0;
+                    if (!flag){
+                        actionPrepare(!first);
+                        flag = true;
+                    }else{
+                        flag = false;
+                        textLib.setVisible(false);
+                        phase = 0;
+                    }
                 } else {
                     
                     image(movie, 0, 0);
@@ -542,7 +553,6 @@ class Game implements Scene {
         }
 
         void finishButton() {
-            textLib.setVisible(false);
             setVisibleXY(false);
             enemy.actionSelect();
             first = random(1) < 0.5;
@@ -550,6 +560,7 @@ class Game implements Scene {
         }
 
         void actionPrepare(boolean act) {
+            textLib.setVisible(false);
             if (act) {
                 action(player, enemy);
                 judgeFinish();
@@ -601,12 +612,18 @@ class Game implements Scene {
                     text = guard.name + "は攻撃を防いだ";
                 } else if (guard.guardType == "remoteGuard") {
                     guard.hp -= decideDamage(attack);
-                    text = guard.name + "に" + decideDamage(attack) + "GBダメージ与えた";
+                    
+                    text = attack instanceof Player ? 
+                    guard.name + "に" + decideDamage(attack) + "GBダメージ与えた" : 
+                    guard.name + "は" + decideDamage(attack) + "GBダメージ受けた";
                 }
             } else if (attack.attackType == "remoteAttack") {
                 if (guard.guardType == "localGuard") {
                     guard.hp -= decideDamage(attack);
-                    text = guard.name + "に" + decideDamage(attack) + "GBダメージ与えた";
+                    
+                    text = attack instanceof Player ? 
+                    guard.name + "に" + decideDamage(attack) + "GBダメージ与えた" : 
+                    guard.name + "は" + decideDamage(attack) + "GBダメージ受けた";
                 } else if (guard.guardType == "remoteGuard") {
                     guard.hp += decideDamage(attack);
                     text = guard.name + "は攻撃を吸収した";
