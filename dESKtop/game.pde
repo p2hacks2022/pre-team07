@@ -1,37 +1,34 @@
 class Game implements Scene {
-<<<<<<< HEAD
     Player player;
     Enemy enemy;
     Adventure adventure;
     String playData;
+    Table map;
+    GameScene[] gameScenes;
+    int sceneNum = 0;
 
     final int CAMERA_RANGE_X = 17;
     final int CAMERA_RANGE_Y = 11;
 
     Game() {
         adventure = new Adventure();
-=======
-    Table map;
-    Player player;
-    Enemy enemy;
-    String playData;
-    GameScene[] gameScenes;
-    int sceneNum = 0;
-
-    Game() {
->>>>>>> 050c88ac8dcd246d9de731802d1329a7dba2b275
     }
 
     void setup() {
+        sceneNum = 1;
         player = new Player();
-<<<<<<< HEAD
-        player.pos = new PVectorInt(int(CAMERA_RANGE_X/2.0), int(CAMERA_RANGE_Y/2.0));
+        player.pos = new PVectorInt(int(CAMERA_RANGE_X / 2.0), int(CAMERA_RANGE_Y / 2.0));
         player.vec = new PVectorInt(0, 0);
+        enemy = new Enemy();
+        gameScenes = new GameScene[]{
+            new Adventure(), 
+            new Battle()
+        };
     }
 
     void draw() {
         background(0);
-        adventure.draw();
+        gameScenes[sceneNum].draw();
     }
 
     void keyPressed() {
@@ -54,13 +51,26 @@ class Game implements Scene {
         adventure.setTarget(mouseX, mouseY);
     }
 
-    class Adventure {
+    abstract class GameScene {
+        GameScene() {
+        }
+        void setup() {
+        }
+        void draw() {
+        }
+        void keyPressed() {
+        }
+        void mousePressed() {
+        }
+    }
+
+    class Adventure extends GameScene {
         Table map;
         // 行数
         int mapRow;
         // 列数
         int mapCol;
-        float tileSize = height/CAMERA_RANGE_Y;
+        float tileSize = height / CAMERA_RANGE_Y;
         // クリック時の移動先マス
         int targetX;
         int targetY;
@@ -98,60 +108,60 @@ class Game implements Scene {
         void drawPlayer(int x, int y, boolean centerXFlag, boolean centerYFlag) {
             fill(255);
             if (centerXFlag && centerYFlag) {
-                circle((CAMERA_RANGE_X/2.0)*tileSize, (CAMERA_RANGE_Y/2.0)*tileSize, tileSize);
+                circle((CAMERA_RANGE_X / 2.0) * tileSize, (CAMERA_RANGE_Y / 2.0) * tileSize, tileSize);
             } else if (!centerXFlag && !centerYFlag) {
-                circle((x+0.5)*tileSize, (y+0.5)*tileSize, tileSize);
+                circle((x + 0.5) * tileSize, (y + 0.5) * tileSize, tileSize);
             } else {
-                float drawX=0;
-                float drawY=0;
+                float drawX = 0;
+                float drawY = 0;
                 if (!centerXFlag) {
-                    drawX = (x+0.5)*tileSize;
-                    drawY = (CAMERA_RANGE_Y/2.0)*tileSize;
+                    drawX = (x + 0.5) * tileSize;
+                    drawY = (CAMERA_RANGE_Y / 2.0) * tileSize;
                 } else if (!centerYFlag) {
-                    drawX = (CAMERA_RANGE_X/2.0)*tileSize;
-                    drawY = (y+0.5)*tileSize;
+                    drawX = (CAMERA_RANGE_X / 2.0) * tileSize;
+                    drawY = (y + 0.5) * tileSize;
                 }
                 circle(drawX, drawY, tileSize);
             }
         }
 
         void drawMap() {
-            int mapY=0;
-            int mapX=0;
+            int mapY = 0;
+            int mapX = 0;
             int drawPlayerX = 0;
             int drawPlayerY = 0;
             boolean centerXFlag = true;
             boolean centerYFlag = true;
 
-            for (int y=0; y < CAMERA_RANGE_Y; y++) {
+            for (int y = 0; y < CAMERA_RANGE_Y; y++) {
                 // playerのy座標が画面y軸中心にする座標範囲か判定
-                mapY = y+player.pos.y-int(CAMERA_RANGE_Y/2.0);
+                mapY = y + player.pos.y - int(CAMERA_RANGE_Y / 2.0);
                 // 上の外側
-                if (player.pos.y <= CAMERA_RANGE_Y/2.0) {
+                if (player.pos.y <= CAMERA_RANGE_Y / 2.0) {
                     mapY = y;
                     drawPlayerY = player.pos.y;
                     centerYFlag = false;
                 }
                 // 下の外側
-                else if (mapRow-CAMERA_RANGE_Y/2.0  <= player.pos.y) {
-                    mapY = mapRow-CAMERA_RANGE_Y + y;
-                    drawPlayerY = player.pos.y-(mapRow-int(CAMERA_RANGE_Y));
+                else if (mapRow - CAMERA_RANGE_Y / 2.0  <= player.pos.y) {
+                    mapY = mapRow - CAMERA_RANGE_Y + y;
+                    drawPlayerY = player.pos.y - (mapRow - int(CAMERA_RANGE_Y));
                     centerYFlag = false;
                 }
-                for (int x=0; x < CAMERA_RANGE_X; x++) {
+                for (int x = 0; x < CAMERA_RANGE_X; x++) {
                     fill(0);
                     // playerのx座標が画面x軸中心にする座標範囲か判定
-                    mapX = x+player.pos.x-int(CAMERA_RANGE_X/2.0);
+                    mapX = x + player.pos.x - int(CAMERA_RANGE_X / 2.0);
                     // 左の外側
-                    if (player.pos.x <= CAMERA_RANGE_X/2.0) {
+                    if (player.pos.x <= CAMERA_RANGE_X / 2.0) {
                         mapX = x;
                         drawPlayerX = player.pos.x;
                         centerXFlag = false;
                     }
                     // 右の外側
-                    else if (mapCol-CAMERA_RANGE_X/2.0  <= player.pos.x) {
-                        mapX = mapCol-CAMERA_RANGE_X + x;
-                        drawPlayerX = player.pos.x-(mapCol-int(CAMERA_RANGE_X));
+                    else if (mapCol - CAMERA_RANGE_X / 2.0  <= player.pos.x) {
+                        mapX = mapCol - CAMERA_RANGE_X + x;
+                        drawPlayerX = player.pos.x - (mapCol - int(CAMERA_RANGE_X));
                         centerXFlag = false;
                     }
 
@@ -173,43 +183,43 @@ class Game implements Scene {
                         fill(100, 100, 150);
                         break;
                     }
-                    rect(x*tileSize, y*tileSize, tileSize, tileSize);
+                    rect(x * tileSize, y * tileSize, tileSize, tileSize);
                 }
             }
 
             textSize(20);
             fill(0);
-            text(player.pos.x+", "+player.pos.y, width/2, height/2-60);
+            text(player.pos.x + ", " + player.pos.y, width / 2, height / 2 - 60);
             drawPlayer(drawPlayerX, drawPlayerY, centerXFlag, centerYFlag);
         }
 
         void drawCursor(float x, float y) {
             fill(0, 100);
-            rect(int(x/tileSize)*tileSize, int(y/tileSize)*tileSize, tileSize, tileSize);
+            rect(int(x / tileSize) * tileSize, int(y / tileSize) * tileSize, tileSize, tileSize);
         }
 
         void setTarget(float x, float y) {
-            if (player.pos.x < CAMERA_RANGE_X/2.0) {
-                targetX = int(x/tileSize);
-            } else if (mapCol-CAMERA_RANGE_X/2.0  <= player.pos.x) {
-                targetX = int(x/tileSize) + mapCol - CAMERA_RANGE_X;
+            if (player.pos.x < CAMERA_RANGE_X / 2.0) {
+                targetX = int(x / tileSize);
+            } else if (mapCol - CAMERA_RANGE_X / 2.0  <= player.pos.x) {
+                targetX = int(x / tileSize) + mapCol - CAMERA_RANGE_X;
             } else {
-                targetX = int(x/tileSize)+player.pos.x-int(CAMERA_RANGE_X/2.0);
+                targetX = int(x / tileSize) + player.pos.x - int(CAMERA_RANGE_X / 2.0);
             }
-            if (player.pos.y < CAMERA_RANGE_Y/2.0) {
-                targetY = int(y/tileSize);
-            } else if (mapRow-CAMERA_RANGE_Y/2.0  <= player.pos.y) {
-                targetY = int(y/tileSize) + mapRow - CAMERA_RANGE_Y;
+            if (player.pos.y < CAMERA_RANGE_Y / 2.0) {
+                targetY = int(y / tileSize);
+            } else if (mapRow - CAMERA_RANGE_Y / 2.0  <= player.pos.y) {
+                targetY = int(y / tileSize) + mapRow - CAMERA_RANGE_Y;
             } else {
-                targetY = int(y/tileSize)+player.pos.y-int(CAMERA_RANGE_Y/2.0);
+                targetY = int(y / tileSize) + player.pos.y - int(CAMERA_RANGE_Y / 2.0);
             }
 
             if (targetX == player.pos.x && targetY == player.pos.y) {
                 return;
             }
 
-            player.vec.x = (targetX - player.pos.x < 0 ? -1: 1);
-            player.vec.y = (targetY - player.pos.y < 0 ? -1: 1);
+            player.vec.x = (targetX - player.pos.x < 0 ? - 1 : 1);
+            player.vec.y = (targetY - player.pos.y < 0 ? - 1 : 1);
             moveDirectCount = 0;
 
             if (abs(player.pos.y - targetY) < abs(player.pos.x - targetX)) {
@@ -231,18 +241,18 @@ class Game implements Scene {
         int aboutBlock(int n) {
             switch(n) {
                 // 床なら1を返す
-            case 1: 
-            case 2: 
+            case 1 : 
+            case 2 : 
             case 3:
                 return 1;
-            case 4: 
+            case 4 : 
             case 5:
                 return 2;
-            case 6: 
+            case 6 : 
             case 7:
                 return 3;
             }
-            return -1;
+            return - 1;
         }
 
         void movePlayer() {
@@ -275,79 +285,14 @@ class Game implements Scene {
             }
         }
     }
-}
-
-class Battle {
-    Battle() {
-=======
-        enemy = new Enemy();
-        gameScenes = new GameScene[]{
-            new Battle(), 
-            new Adventure()
-        };
-    }
-
-    void loadMap(String _playData) {
-        if (_playData == "saveData1") {
-            //map = loadTable("map1.csv");
-        }
-    }
-
-    void draw() {
-        textAlign(CENTER, CENTER);
-        textSize(50);
-        fill(255);
-        text("Game", width/2, height/2-30);
-        text("Play:"+playData, width/2, height/2+30);
-        gameScenes[sceneNum].draw();
-    }
-
-    void keyPressed() {
-        if (keyCode == LEFT) {
-            app.changeScene(1);
-        } else if (keyCode == RIGHT) {
-            app.changeScene(3);
-        };
-    }
-
-    void mousePressed() {
-    }
-
-    abstract class GameScene implements Scene {
-        GameScene() {
-        }
-        void setup() {
-        }
-        void draw() {
-        }
-        void keyPressed() {
-        }
-        void mousePressed() {
-        }
-    }
-
-    class Adventure extends GameScene {
-        Adventure() {
-        }
-        void showMap() {
-        }
-        void setup() {
-        }
-        void draw() {
-        }
-        void keyPressed() {
-        }
-        void mousePressed() {
-        }
-    }
 
     class Battle extends GameScene {
         final float SELF_DAMAGE_RATE = 0.1;
         PImage panel;
         int phase = 0;
         String text;
-
         Button[] buttons;
+
         Battle() {
             panel = loadImage("panel.png");
             panel.resize(300, 180);
@@ -357,7 +302,7 @@ class Battle {
                 new Button(this, "localAttack", 100, height - 120, 80, 80, 10), 
                 new Button(this, "remoteAttack", width - 180, height - 120, 80, 80, 10)
             };
-            for (Button button : buttons){
+            for (Button button : buttons) {
                 //button.set.label(button.getButtonName, 12);
                 button.set.align(CENTER, TOP);
             }
@@ -369,32 +314,32 @@ class Battle {
 
         void draw() {
             background(0);
-            image(panel, 250, height-180);
+            image(panel, 250, height - 180);
             textSize(20);
             switch(phase) {
             case 0:
                 fill(255, 0, 0);
-                text("- 防御選択 -", width/2, height-158);
+                text("- 防御選択 -", width / 2, height - 158);
                 fill(255);
-                text("防御方法を選んでください", width/2, height-80);
+                text("防御方法を選んでください", width / 2, height - 80);
                 break;
             case 1:
                 fill(255, 0, 0);
-                text("- 攻撃選択 -", width/2, height-158);
+                text("- 攻撃選択 -", width / 2, height - 158);
                 fill(255);
-                text("攻撃方法を選んでください", width/2, height-80);
+                text("攻撃方法を選んでください", width / 2, height - 80);
                 break;
             case 2:
                 fill(255, 0, 0);
-                text("- あなたのターン -", width/2, height-158);
+                text("- あなたのターン -", width / 2, height - 158);
                 fill(255);
-                text(text, width/2, height-80);
+                text(text, width / 2, height - 80);
                 break;
             case 3:
                 fill(255, 0, 0);
-                text("- 敵のターン -", width/2, height-158);
+                text("- 敵のターン -", width / 2, height - 158);
                 fill(255);
-                text(text, width/2, height-80);
+                text(text, width / 2, height - 80);
                 break;
             }
         }
@@ -469,25 +414,24 @@ class Battle {
                 if (guard.guardType == "localGuard") {
                     //ダメージなし
                     guard.hp -= 0;
-                    text = guard.name+"は攻撃を防いだ";
+                    text = guard.name + "は攻撃を防いだ";
                 } else if (guard.guardType == "remoteGuard") {
                     guard.hp -= decideDamage(attack);
-                    text = guard.name+"に"+decideDamage(attack)+"GBダメージ与えた";
+                    text = guard.name + "に" + decideDamage(attack) + "GBダメージ与えた";
                 }
             } else if (attack.attackType == "remoteAttack") {
                 if (guard.guardType == "localGuard") {
                     guard.hp -= decideDamage(attack);
-                    text = guard.name+"に"+decideDamage(attack)+"GBダメージ与えた";
+                    text = guard.name + "に" + decideDamage(attack) + "GBダメージ与えた";
                 } else if (guard.guardType == "remoteGuard") {
                     guard.hp += decideDamage(attack);
-                    text = guard.name+"は攻撃を吸収した";
+                    text = guard.name + "は攻撃を吸収した";
                 }
             }
         }
 
         int decideDamage(CharacterBase attack) {
-            return attack.powerLower + (int)random(attack.powerUpper+1);
+            return attack.powerLower + (int)random(attack.powerUpper + 1);
         }
->>>>>>> 050c88ac8dcd246d9de731802d1329a7dba2b275
     }
 }
