@@ -20,10 +20,11 @@ Githubからダウンロードして、そこからファイルを開く。そ�
 
 ![image (2)](https://user-images.githubusercontent.com/120097886/208280263-c9752a41-0f6c-4f24-a110-4a614777179c.png)
 <img width="427" alt="スクリーンショット 2022-12-18 122139" src="https://user-images.githubusercontent.com/120097886/208280503-3ec0277c-14e5-49c8-b69a-7e31caedd5eb.png">
+ ![dESKtop](https://user-images.githubusercontent.com/120097886/208280564-ad88b037-f73c-4b14-b8f9-1f25168edc77.png)
 
 
+## 開発体制 
 
-## 開発体制  
 
 
 役割分担  
