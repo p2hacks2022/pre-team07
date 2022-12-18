@@ -112,25 +112,22 @@ class Game implements Scene {
         // 1方向目の移動中か
         int moveDirectCount;
         int moveStep;
-        // プレーヤ―の画像
-        int playerImgNum = 0;
         // 敵が出現する確率(0~100%で指定)
-        float enemyProbability = 1;
+        float enemyProbability = 5;
 
         Adventure() {
             player = new Player();
-            loadMap(playData);
+            loadMap("saveData1");
             mapRow = map.getRowCount();
             mapCol = map.getColumnCount();
             player.pos = new PVectorInt(getMapNum(8)[1], getMapNum(8)[0]);
-            player.vec = new PVectorInt(0, 1);
+            player.vec = new PVectorInt(0, 0);
             keyFlag = false;
             setup();
         }
 
         void setup() {
             moveFlag = false;
-            player.vec = new PVectorInt(0, 1);
         }
 
         void draw() {
@@ -161,7 +158,7 @@ class Game implements Scene {
 
         void drawKeyFrame() {
             push();
-            fill(100, 100, 255, 150);
+            fill(0, 150);
             strokeWeight(3);
             stroke(255);
             rect(25, 25, 50, 50);
@@ -169,9 +166,8 @@ class Game implements Scene {
         }
 
         void drawKey() {
-            //fill(240, 240, 0);
-            //circle(50, 50, 20);
-            image(fileIO.keyImg, 30, 30, 45, 45);
+            fill(240, 240, 0);
+            circle(50, 50, 20);
         }
 
         void update() {
@@ -184,55 +180,27 @@ class Game implements Scene {
             if (_playData == "saveData1") {
                 player.field = fileIO.saveData.getInt(1, 0);
                 player.floor = fileIO.saveData.getInt(1, 1);
-                println(player.field, ",", player.floor);
                 map = loadTable("Map"+str(player.field)+"_"+str(player.floor)+".csv");
-            }
-        }
-
-        void drwaPlayerImg(int x, int y, int directX, int directY) {
-            if (moveStep == 2) {
-                directY = 0;
-            } else if(moveStep == 1) {
-                directX = 0;
-            }
-            // 右
-            if (directX == 1 && directY == 0) {
-                image(fileIO.playerImg[1][playerImgNum], x, y, tileSize, tileSize);
-            } 
-            // 左
-            else if (directX == -1 && directY == 0) {
-                image(fileIO.playerImg[3][playerImgNum], x, y, tileSize, tileSize);
-            }
-            // 上
-            else if (directX == 0 && directY == -1) {
-                image(fileIO.playerImg[2][playerImgNum], x, y, tileSize, tileSize);
-            }
-            // 下
-            else if (directX == 0 && directY == 1) {
-                image(fileIO.playerImg[0][playerImgNum], x, y, tileSize, tileSize);
             }
         }
 
         void drawPlayer(int x, int y, boolean centerXFlag, boolean centerYFlag) {
             fill(255);
             if (centerXFlag && centerYFlag) {
-                // circle(((CAMERA_RANGE_X / 2.0)) * tileSize, ((CAMERA_RANGE_Y / 2.0)) * tileSize, tileSize);
-                drwaPlayerImg(int(((CAMERA_RANGE_X / 2.0)-0.5) * tileSize), int(((CAMERA_RANGE_Y / 2.0)-0.5) * tileSize), player.vec.x, player.vec.y);
+                circle((CAMERA_RANGE_X / 2.0) * tileSize, (CAMERA_RANGE_Y / 2.0) * tileSize, tileSize);
             } else if (!centerXFlag && !centerYFlag) {
-                // circle(x * tileSize, y * tileSize, tileSize);
-                drwaPlayerImg(int(x * tileSize), int(y * tileSize), player.vec.x, player.vec.y);
+                circle((x + 0.5) * tileSize, (y + 0.5) * tileSize, tileSize);
             } else {
                 float drawX = 0;
                 float drawY = 0;
                 if (!centerXFlag) {
-                    drawX = x * tileSize;
-                    drawY = (CAMERA_RANGE_Y / 2.0 - 0.5) * tileSize;
+                    drawX = (x + 0.5) * tileSize;
+                    drawY = (CAMERA_RANGE_Y / 2.0) * tileSize;
                 } else if (!centerYFlag) {
-                    drawX = (CAMERA_RANGE_X / 2.0 - 0.5) * tileSize;
-                    drawY = y * tileSize;
+                    drawX = (CAMERA_RANGE_X / 2.0) * tileSize;
+                    drawY = (y + 0.5) * tileSize;
                 }
-                // circle(drawX, drawY, tileSize);
-                drwaPlayerImg(int(drawX), int(drawY), player.vec.x, player.vec.y);
+                circle(drawX, drawY, tileSize);
             }
         }
 
@@ -277,32 +245,30 @@ class Game implements Scene {
                     }
 
                     // マップの数値を取得
-                    switch(aboutBlock(map.getInt(mapY, mapX))) {
+                    switch(map.getInt(mapY, mapX)) {
                     case 1:
-                        // fill(255, 255, 150);
-                        image(fileIO.floorImg[player.field-1], x * tileSize, y * tileSize, tileSize, tileSize);
+                        fill(255, 255, 150);
                         break;
                     case 2:
-                        // fill(255, 255, 100);
-                        image(fileIO.wallTopImg[player.field-1], x * tileSize, y * tileSize, tileSize, tileSize);
+                        fill(255, 255, 100);
                         break;
                     case 3:
-                        // fill(255, 255, 50);
-                        image(fileIO.wallSideImg[player.field-1], x * tileSize, y * tileSize, tileSize, tileSize);
+                        fill(255, 255, 50);
                         break;
                     case 4:
-                        image(fileIO.keyFloorImg, x * tileSize, y * tileSize, tileSize, tileSize);
-                        image(fileIO.keyImg, x * tileSize, y * tileSize, tileSize, tileSize);
+                        fill(50, 50, 150);
+                        break;
+                    case 6:
+                        fill(100, 100, 150);
                         break;
                     }
-
-                    // rect(x * tileSize, y * tileSize, tileSize, tileSize);
+                    rect(x * tileSize, y * tileSize, tileSize, tileSize);
                 }
             }
 
             textSize(20);
             fill(0);
-            // text(player.pos.x + ", " + player.pos.y, width / 2, height / 2 - 60);
+            text(player.pos.x + ", " + player.pos.y, width / 2, height / 2 - 60);
             drawPlayer(drawPlayerX, drawPlayerY, centerXFlag, centerYFlag);
         }
 
@@ -358,23 +324,12 @@ class Game implements Scene {
             case  2 :
             case 3:
                 return 1;
-                // 壁の上面なら2を返す
             case 4 :
             case 5:
                 return 2;
-                // 壁の側面なら2を返す
             case 6 :
             case 7:
                 return 3;
-                // 鍵なら4を返す
-            case -1:
-                return 4;
-                // スタートなら5を返す
-            case 8:
-                return 5;
-                // ゴールなら6を返す
-            case 9:
-                return 6;
             }
             return - 1;
         }
@@ -399,9 +354,6 @@ class Game implements Scene {
                 if (player.pos.y == targetY || aboutBlock(move) == 2 || aboutBlock(move) == 3) {
                     moveStep = 2;
                     moveDirectCount++;
-                    if(2 <= moveDirectCount) {
-                        player.vec.x = 0;
-                    }
                 }
             }
             // 横方向移動
@@ -414,9 +366,6 @@ class Game implements Scene {
                 if (player.pos.x == targetX || aboutBlock(move) == 2 || aboutBlock(move) == 3) {
                     moveStep = 1;
                     moveDirectCount++;
-                    if(2 <= moveDirectCount) {
-                        player.vec.y = 0;
-                    }
                 }
             }
             switch(map.getInt(player.pos.y, player.pos.x)) {
@@ -432,12 +381,9 @@ class Game implements Scene {
                     moveStep = 0;
                     player.floor++;
                     if (floorMapTotal[player.field-1] < player.floor) {
-                        player.floor = 1;
+                        player.floor = 0;
                         player.field++;
                     }
-                    fileIO.saveData.setInt(1, 0, player.field);
-                    fileIO.saveData.setInt(1, 1, player.floor);
-                    saveTable(fileIO.saveData, fileIO.dataPath+playData+".csv");
                     gameSceneChange(0);
                     gameScenes[0] = new Adventure();
                 }
@@ -449,7 +395,7 @@ class Game implements Scene {
             }
 
             // 敵出現
-            if (random(100) < enemyProbability && moveStep != 0 && aboutBlock(map.getInt(player.pos.y, player.pos.x)) == 1) {
+            if (random(100) < enemyProbability && moveStep != 0) {
                 moveFlag = false;
                 moveStep = 0;
                 enemy = new Enemy(enemies[(int)random(3)]);
@@ -486,6 +432,7 @@ class Game implements Scene {
                 button.set.align(CENTER, TOP);
             }
             setVisibleXY(false);
+            textLib.setVisible(false);
         }
 
         void draw() {
@@ -506,11 +453,12 @@ class Game implements Scene {
                 textLib.setText("攻撃方法を選んでください", width / 2, height - 80, 0.1, 0);
                 break;
             case 2:
-
-                print("you : ");
-                println(millis() - startTime);
+            
+                    print("you : ");
+                    println(millis() - startTime);
                 if (!isMovieFinished && startTime+nowDuration < millis()) {
                     movie = fileIO.movies[getIndex(enemy.guardType)];
+                    movie.jump(0);
                     movie.play();
                     nowDuration = movie.duration() * 1000;
                     fileIO.movies[getIndex(enemy.guardType)].play();
@@ -529,10 +477,11 @@ class Game implements Scene {
                 }
                 break;
             case 3:
-                print("teki : ");
-                println(millis() - startTime);
+            print("teki : ");
+                    println(millis() - startTime);
                 if (!isMovieFinished && startTime+nowDuration < millis()) {
                     movie = fileIO.movies[getIndex(enemy.guardType)];
+                    movie.jump(0);
                     movie.play();
                     nowDuration = movie.duration() * 1000;
                     isMovieFinished = true;
@@ -542,7 +491,7 @@ class Game implements Scene {
                     setVisibleAB(true);
                     phase = 0;
                 } else {
-
+                    
                     image(movie, 0, 0);
                     fill(255, 0, 0);
                     text("- 敵のターン -", width / 2, height - 159);
@@ -615,6 +564,8 @@ class Game implements Scene {
                 phase = 3;
                 movie = fileIO.movies[getIndex(enemy.attackType)];
             }
+            textLib.setVisible(false);
+            movie.jump(0);
             movie.play();
             nowDuration = movie.duration() * 1000;
             startTime = millis();

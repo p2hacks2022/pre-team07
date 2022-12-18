@@ -41,7 +41,7 @@ class DataSelect implements Scene {
             button[2].visible(false);
             setPlayData(dataName);
             app.changeScene(2);
-            println("play [" + dataName + "]");
+            // println("play [" + dataName + "]");
         }
     }
 

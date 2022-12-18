@@ -2,8 +2,10 @@ class FileIO {
     String dataPath;
     Table saveData;
     PImage title;
-    PImage[] wallImg ;
     PImage[] floorImg;
+    PImage[] wallSideImg;
+    PImage[] wallTopImg;
+    PImage keyFloorImg;
     PImage keyImg;
     PImage startImg;
     PImage goalImg;
@@ -20,25 +22,32 @@ class FileIO {
         dataPath = "./data/";
         saveData = loadTable(dataPath+"saveData1.csv");
         title = loadImage(dataPath+"title.png");
-        wallImg = new PImage[] {
-            loadImage(dataPath+"wall1.png"), 
-            loadImage(dataPath+"wall2.png"), 
-            loadImage(dataPath+"wall3.png")
-        };
         floorImg = new PImage[] {
             loadImage(dataPath+"floor1.png"), 
             loadImage(dataPath+"floor2.png"), 
             loadImage(dataPath+"floor3.png")
         };
+        wallSideImg = new PImage[] {
+            loadImage(dataPath+"wallSide1.png"), 
+            loadImage(dataPath+"wallSide2.png"), 
+            loadImage(dataPath+"wallSide2.png")
+        };
+        wallTopImg = new PImage[] {
+            loadImage(dataPath+"wallTop1.png"), 
+            loadImage(dataPath+"wallTop2.png"), 
+            loadImage(dataPath+"wallTop2.png")
+        };
         keyImg = loadImage(dataPath+"key.png");
         startImg = loadImage(dataPath+"start.png");
         goalImg = loadImage(dataPath+"goal.png");
         playerImg = new PImage[][] {
-            {loadImage(dataPath+"player_f1.png"), loadImage(dataPath+"player_f2.png"), loadImage(dataPath+"player_f3.png")}, 
-            {loadImage(dataPath+"player_b1.png"), loadImage(dataPath+"player_b2.png"), loadImage(dataPath+"player_b3.png")}, 
-            {loadImage(dataPath+"player_r1.png"), loadImage(dataPath+"player_r2.png"), loadImage(dataPath+"player_r3.png")}, 
-            {loadImage(dataPath+"player_l1.png"), loadImage(dataPath+"player_l2.png"), loadImage(dataPath+"player_l3.png")}, 
+            {loadImage(dataPath+"player1-1.png"), loadImage(dataPath+"player1-2.png"), loadImage(dataPath+"player1-3.png")}, 
+            {loadImage(dataPath+"player2-1.png"), loadImage(dataPath+"player2-2.png"), loadImage(dataPath+"player2-3.png")}, 
+            {loadImage(dataPath+"player3-1.png"), loadImage(dataPath+"player3-2.png"), loadImage(dataPath+"player3-3.png")}, 
+            {loadImage(dataPath+"player4-1.png"), loadImage(dataPath+"player4-2.png"), loadImage(dataPath+"player4-3.png")}
         };
+        keyFloorImg = loadImage(dataPath+"keyFloor.png");
+        keyImg = loadImage(dataPath+"key.png");
         panel = loadImage(dataPath+"panel.png");
         gameOverImg = loadImage(dataPath+"gameOver.png");
         movies = new Movie[]{
