@@ -716,6 +716,10 @@ class Game implements Scene {
                     gameSceneChange(0);
                     if(enemy.id == 5) {
                         gameScenes[0] = new Adventure();
+                        if(memoryFlag) {
+                            gameSceneChange(3);
+                            return;
+                        }
                     }
                     println("toAdventure");
                 } else {
