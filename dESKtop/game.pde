@@ -512,19 +512,21 @@ class Game implements Scene {
                 //ゲームオーバー
             case 4:
                 if (startTime+PREPARE_TIME*1000 < millis()) {
+                    textLib.setVisible(false);
                     gameSceneChange(2);
                     println("gameOver");
                 } else {
-                    textLib.setText("", width / 2, height - 80, 0.1, 0);
+                    textLib.setText(player.name+"は削除されました", width / 2, height - 80, 0.03, 0);
                 }
                 break;
                 //勝利
             case 5:
                 if (startTime+PREPARE_TIME*1000 < millis()) {
+                    textLib.setVisible(false);
                     gameSceneChange(0);
                     println("toAdventure");
                 } else {
-                    textLib.setText("", width / 2, height - 80, 0.1, 0);
+                    textLib.setText(enemy.name+"を倒した", width / 2, height - 80, 0.1, 0);
                 }
                 break;
             }
