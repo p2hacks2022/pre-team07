@@ -18,8 +18,10 @@ Githubからダウンロードして、そこからファイルを開く。そ�
  また自分たちで考えた、簡単かつ、論理的な思考回路が身につく戦闘、記憶力の向上につながる、ダンジョン探索パートなどもぜひ体験してほしいと思いました。
 
 スクリーンショット(任意) 
-<img width="427" alt="スクリーンショット 2022-12-18 122139" src="https://user-images.githubusercontent.com/120097886/208280259-7658f7aa-9223-44e6-af04-0d63827d5316.png">
+<img width="427" alt="スクリーンショット 2022-12-18 122139" src="https://user-images.githubusercontent.com/120097886/208280259-7658f7aa-9223-44e6-af04-![dESKtop (1)](https://user-images.githubusercontent.com/120097886/208280427-67db2cd3-b592-4e72-a541-abbe757cdc19.png)
+0d63827d5316.png">
 ![image (2)](https://user-images.githubusercontent.com/120097886/208280263-c9752a41-0f6c-4f24-a110-4a614777179c.png)
+![Uploading dESKtop (1).png…]()
 
 ## 開発体制  
 Processing IDE,Github,MediBang Paint Pro,Effekseer
