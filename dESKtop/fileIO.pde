@@ -42,10 +42,10 @@ class FileIO {
         panel = loadImage(dataPath+"panel.png");
         gameOverImg = loadImage(dataPath+"gameOver.png");
         movies = new Movie[]{
-            new Movie(papplet, "localBarrier.mov"), 
-            new Movie(papplet, "remoteBarrier.mov"), 
-            new Movie(papplet, "localAttack.mov"), 
-            new Movie(papplet, "remoteAttack.mov")
+            new Movie(papplet, "localBarrier.mp4"), 
+            new Movie(papplet, "remoteBarrier.mp4"), 
+            new Movie(papplet, "localAttack.mp4"), 
+            new Movie(papplet, "remoteAttack.mp4")
         };
     }
 }
