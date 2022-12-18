@@ -11,6 +11,7 @@ class App {
     final long TRANSITION_TIME = 2000;
     long transitionStartTime;
     PFont font;
+    int transitionPoint=0;
 
     App() {
         sceneList = new Scene[] {
@@ -55,7 +56,21 @@ class App {
         textAlign(RIGHT, BOTTOM);
         textSize(50);
         fill(255);
-        text("LOADING...", width-5, height-5);
+        text("LOADING   ", width-5, height-5);
+        if(frameCount % 10 == 0) {
+            transitionPoint = 3<transitionPoint ? 0 : ++transitionPoint;
+        }
+        switch(transitionPoint) {
+            case 1:
+                text(".  ", width-5, height-5);
+            break;
+            case 2:
+                text(".. ", width-5, height-5);
+            break;
+            case 3:
+                text("...", width-5, height-5);
+            break;
+        }
     }
 
     // デバッグ用（トランジションは発生しない）

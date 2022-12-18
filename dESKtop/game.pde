@@ -129,7 +129,7 @@ class Game implements Scene {
         // プレーヤ―の画像
         int playerImgNum = 0;
         // 敵が出現する確率(0~100%で指定)
-        float enemyProbability = 1;
+        float enemyProbability = 2;
         boolean changeFloor;
 
         Adventure() {
@@ -165,12 +165,18 @@ class Game implements Scene {
             if(changeFloor) {
                 fill(0, 150);
                 rect(0, 0, width, height);
-                int w = fileIO.panel.width;
-                int h = fileIO.panel.height;
-                image(fileIO.panel, width/2.0-(w*2*0.5), height - 180, w*2, h);
-                w = fileIO.playerStandImg.width;
-                h = fileIO.playerStandImg.height;
+                int w = fileIO.playerStandImg.width;
+                int h = fileIO.playerStandImg.height;
                 image(fileIO.playerStandImg, width-100, 100, w*0.7, h*0.7);
+                w = fileIO.panel.width;
+                h = fileIO.panel.height;
+                image(fileIO.panel, width/2.0-(w*2*0.5), height - 180, w*2, h);
+                
+                fill(255);
+                pushMatrix();
+                translate(width/2.0+w-40, height-215+h+map(sin(frameCount/15.0), -1, 1, 0, 10));
+                triangle(-10, -15, 10, -15, 0, 0);
+                popMatrix();
             }
         }
 
@@ -419,7 +425,7 @@ class Game implements Scene {
             case 9:
                 return 6;
             }
-            return - 1;
+            return -1;
         }
 
         void getKey(int x, int y) {
