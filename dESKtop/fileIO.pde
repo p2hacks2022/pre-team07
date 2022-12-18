@@ -8,6 +8,7 @@ class FileIO {
     PImage[] wallTopImg;
     PImage keyFloorImg;
     PImage[] battleIconImg;
+    PImage[] battleBGImg;
     PImage[] enemyImg;
     PImage keyImg;
     PImage startImg;
@@ -53,6 +54,13 @@ class FileIO {
             loadImage(dataPath+"remoteGuard_image.png"), 
             loadImage(dataPath+"localAttack_image.png"), 
             loadImage(dataPath+"remoteAttack_image.png")
+        };
+        
+        battleBGImg = new PImage[]{
+            loadImage(dataPath+"MAP1.png"), 
+            loadImage(dataPath+"MAP2.png"), 
+            loadImage(dataPath+"MAP3.png"),
+            loadImage(dataPath+"lastBG.png")
         };
         enemyImg = new PImage[]{
             loadImage(dataPath+"bit.png"), 

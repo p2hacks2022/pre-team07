@@ -39,7 +39,7 @@ class Game implements Scene {
             new Enemy("ランナー", 512, 100, 300, 3), 
             new Enemy("ガードマシン", 1024, 150, 300, 4), 
             //ボス
-            new Enemy("", 1024, 150, 400, 5), 
+            new Enemy("カオスクロノス", 1024, 150, 400, 5), 
         };
         textLib = new TextLib(); 
         gameScenes = new GameScene[]{
@@ -381,7 +381,8 @@ class Game implements Scene {
         void keySensor(int x, int y) {
             int dis=0;
             boolean flag = false;
-
+            // 上手く動かない
+            /*
             if ((player.field == 3 && player.floor == 3 && abs(-1-y) <= keyRange) && abs(mapCol-x) <= keyRange) {
                 flag = true;
                 if (abs(keyX-x) < abs(keyY-y)) {
@@ -395,16 +396,16 @@ class Game implements Scene {
                     dis = abs(keyY-y);
                 }
             } else {
-                if (abs(keyX-x) <= keyRange) {
+                if (abs(keyX-x) <= keyRange|| (player.field == 3 && player.floor == 3 && abs(-1-x) <= keyRange)) {
                     flag = true;
                     dis = abs(keyX-x);
                 }
             }
-            if (flag && (!keyFlag && !(memoryFlag || (player.field == 3 && player.floor == 3)))) {
+            if (flag) {
                 // あとで鍵との近さによって音量を調整する
                 // setVolum(fileIO.sensorSound, (dis/keyRange)*100.0);
                 // println((dis/keyRange)*100.0);
-            }
+            }*/
         }
 
         void setVolum(AudioPlayer sound, float vol) {
@@ -623,21 +624,25 @@ class Game implements Scene {
         }
 
         void draw() {
-            background(0);
-            image(fileIO.enemyImg[enemy.id], 200, height / 2);
-            image(fileIO.enemyImg[enemy.id], width - 200, height / 2);
+            if (enemy.id != 5) {
+                image(fileIO.battleBGImg[player.field], 0, 0, width, height);
+            } else {
+                image(fileIO.battleBGImg[3], 0, 0, width, height);
+            }
+            image(fileIO.playerStandImg, 100, 100, 240, 400);
+            image(fileIO.enemyImg[enemy.id], width - 350, 100, 300, 300);
             image(fileIO.panel, 275, height - 180);
             textSize(20);
             switch(phase) {
             case 0:
                 fill(255, 0, 0);
-                text("- 防御選択 -", width / 2, height - 159);
+                text("- 防御選択 -", width / 2, height - 149);
                 fill(255);
                 textLib.setText("防御方法を選んでください", width / 2, height - 80, 0.1, 0);
                 break;
             case 1:
                 fill(255, 0, 0);
-                text("- 攻撃選択 -", width / 2, height - 159);
+                text("- 攻撃選択 -", width / 2, height - 149);
                 fill(255);
                 textLib.setText("攻撃方法を選んでください", width / 2, height - 80, 0.1, 0);
                 break;
@@ -661,9 +666,9 @@ class Game implements Scene {
                         phase = 0;
                     }
                 } else {
-                    image(movie, 0, 0);
+                    image(movie, 0, 0, width, height);
                     fill(255, 0, 0);
-                    text("- あなたのターン -", width / 2, height - 159);
+                    text("- あなたのターン -", width / 2, height - 149);
                     fill(255);
                     textLib.setText(text, width / 2, height - 80, 0.1, 0);
                 }
@@ -687,9 +692,9 @@ class Game implements Scene {
                         phase = 0;
                     }
                 } else {
-                    image(movie, 0, 0);
+                    image(movie, 0, 0, width, height);
                     fill(255, 0, 0);
-                    text("- 敵のターン -", width / 2, height - 159);
+                    text("- 敵のターン -", width / 2, height - 149);
                     fill(255);
                     textLib.setText(text, width / 2, height - 80, 0.1, 0);
                 }
@@ -709,6 +714,9 @@ class Game implements Scene {
                 if (startTime+PREPARE_TIME*1000 < millis()) {
                     textLib.setVisible(false);
                     gameSceneChange(0);
+                    if(enemy.id == 5) {
+                        gameScenes[0] = new Adventure();
+                    }
                     println("toAdventure");
                 } else {
                     textLib.setText(enemy.name+"を倒した", width / 2, height - 80, 0.1, 0);
@@ -890,11 +898,20 @@ class Game implements Scene {
     }
 
     class GameOver extends GameScene {
-
+        //dataSelectに戻る
+        Button button;
 
         GameOver() {
         }
         void setup() {
+            button = new Button(this, "returnDataSelect", width / 2, height - 120, 300, 80, 10);
+            button.set.align(CENTER, TOP);
+            button.set.label("DataSelectに戻る", 20);
+        }
+        
+        void returnDataSelect(){
+            button.visible(false);
+            app.changeScene(1);
         }
 
         void draw() {
