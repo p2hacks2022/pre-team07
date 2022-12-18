@@ -1,5 +1,3 @@
-import processing.video.*;
-
 class Game implements Scene {
     Player player;
     Enemy[] enemies;
@@ -32,11 +30,14 @@ class Game implements Scene {
         player.pos = new PVectorInt(int(CAMERA_RANGE_X / 2.0), int(CAMERA_RANGE_Y / 2.0));
         player.vec = new PVectorInt(0, 0);
         enemies = new Enemy[]{
-            new Enemy("zako", 128, 100, 150), 
-            new Enemy("hutuu", 256, 50, 200), 
-            new Enemy("tyubosu", 512, 100, 300), 
-            new Enemy("rasubosu", 512, 150, 400), 
-            new Enemy("rasubosu2", 512, 200, 500), 
+            new Enemy("ビット", 128, 50, 100, 0), 
+            new Enemy("ドローン", 256, 50, 150, 1), 
+            new Enemy("ギアフィッシュ", 512, 100, 200, 2), 
+            //中ボス
+            new Enemy("ランナー", 512, 100, 300, 3), 
+            new Enemy("ガードマシン", 1024, 150, 300, 4), 
+            //ボス
+            new Enemy("", 1024, 150, 400, 5), 
         };
         textLib = new TextLib(); 
         gameScenes = new GameScene[]{
@@ -430,8 +431,9 @@ class Game implements Scene {
                 new Button(this, "localAttack", 100, height - 120, 80, 80, 10), 
                 new Button(this, "remoteAttack", width - 180, height - 120, 80, 80, 10)
             };
-            for (Button button : buttons) {
-                button.set.align(CENTER, TOP);
+            for (int i = 0; i < buttons.length; i++) {
+                buttons[i].set.align(CENTER, TOP);
+                buttons[i].set.bgImage(fileIO.battleIconImg[i]);
             }
             setVisibleXY(false);
             textLib.setVisible(false);
@@ -441,6 +443,8 @@ class Game implements Scene {
 
         void draw() {
             background(0);
+            image(fileIO.enemyImg[enemy.id], 200, height / 2);
+            image(fileIO.enemyImg[enemy.id], width - 200, height / 2);
             image(fileIO.panel, 275, height - 180);
             textSize(20);
             switch(phase) {
@@ -530,6 +534,8 @@ class Game implements Scene {
                 }
                 break;
             }
+            showHpBar(player);
+            showHpBar(enemy);
         }
 
         void keyPressed() {
@@ -583,9 +589,9 @@ class Game implements Scene {
 
         void actionPrepare(boolean act) {
             textLib.setVisible(false);
-            if (judgeFinish()){
-                    return;
-                }
+            if (judgeFinish()) {
+                return;
+            }
             if (act) {
                 action(player, enemy);
                 phase = 2;
@@ -630,7 +636,7 @@ class Game implements Scene {
                 startTime = millis();
                 phase = 4;
                 return true;
-            }else {
+            } else {
                 return false;
             }
         }
@@ -665,6 +671,34 @@ class Game implements Scene {
 
         int decideDamage(CharacterBase attack) {
             return attack.powerLower + (int)random(attack.powerUpper + 1);
+        }
+
+        void showHpBar(Player chara) {
+            fill(255);
+            textSize(20);
+            textAlign(CENTER);
+            text(chara.name, 175, 40);
+            fill(255);
+            rect(100, 60, 150, 10, 5);
+            float rate = constrain(chara.firstHP/float(chara.hp/**1000*/), 0, 1);
+            fill(255);
+            rect(100+150*rate, 60, 150*(1-rate), 10, 5);
+            fill(127, 255, 255);
+            rect(100, 60, 150*rate, 10, 5);
+        }
+
+        void showHpBar(Enemy chara) {
+            fill(255);
+            textSize(20);
+            textAlign(CENTER);
+            text(chara.name, width - 175, 40);
+            fill(255);
+            rect(width-250, 60, 150, 10, 5);
+            float rate = constrain(chara.firstHP/float(chara.hp/**1000*/), 0, 1);
+            fill(255);
+            rect(width-250+150*rate, 60, 150*(1-rate), 10, 5);
+            fill(127, 255, 255);
+            rect(width-250, 60, 150*rate, 10, 5);
         }
     }
 

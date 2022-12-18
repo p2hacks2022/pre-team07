@@ -4,6 +4,8 @@ class FileIO {
     PImage title;
     PImage[] wallImg ;
     PImage[] floorImg;
+    PImage[] battleIconImg;
+    PImage[] enemyImg;
     PImage keyImg;
     PImage startImg;
     PImage goalImg;
@@ -11,6 +13,7 @@ class FileIO {
     PImage panel;
     PImage gameOverImg;
     Movie[] movies;
+    AudioPlayer[] audioPlayers;
 
     FileIO() {
         init();
@@ -30,6 +33,20 @@ class FileIO {
             loadImage(dataPath+"floor2.png"), 
             loadImage(dataPath+"floor3.png")
         };
+        battleIconImg = new PImage[]{
+            loadImage(dataPath+"localGuard_image.png"), 
+            loadImage(dataPath+"remoteGuard_image.png"), 
+            loadImage(dataPath+"localAttack_image.png"),
+            loadImage(dataPath+"remoteAttack_image.png")
+        };
+        enemyImg = new PImage[]{
+            loadImage(dataPath+"bit.png"), 
+            loadImage(dataPath+"drone.png"), 
+            loadImage(dataPath+"gearfish.png"),
+            loadImage(dataPath+"runner.png"),
+            loadImage(dataPath+"guardmachine.png"),
+            loadImage(dataPath+"lastboss.png")
+        };
         keyImg = loadImage(dataPath+"key.png");
         startImg = loadImage(dataPath+"start.png");
         goalImg = loadImage(dataPath+"goal.png");
@@ -47,5 +64,12 @@ class FileIO {
             new Movie(papplet, "localAttack.mp4"), 
             new Movie(papplet, "remoteAttack.mp4")
         };
+        //audioPlayers = new AudioPlayer[]{
+        //    minim.loadFile(""),
+        //    minim.loadFile(""),
+        //    minim.loadFile(""),
+        //    minim.loadFile(""),
+        //    minim.loadFile("")
+        //};
     }
 }

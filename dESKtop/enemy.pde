@@ -1,9 +1,12 @@
 class Enemy extends CharacterBase {
-    Enemy(String name, int hp, int powerUpper, int powerLower) {
+    int id;
+    Enemy(String name, int hp, int powerUpper, int powerLower, int id) {
         this.name = name;
         this.hp = hp;
+        this.firstHP = hp;
         this.powerUpper = powerUpper;
         this.powerLower = powerLower;
+        this.id = id;
     }
     
     Enemy(Enemy enemy) {

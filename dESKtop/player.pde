@@ -6,6 +6,7 @@ class Player extends CharacterBase {
     Player() {
         this.name = "アステル";
         this.hp = 1024;
+        this.firstHP = 1024;
         this.powerUpper = 300;
         this.powerLower = 100;
     }

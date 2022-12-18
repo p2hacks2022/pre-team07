@@ -130,8 +130,8 @@ public class Button {
                 }
             }
         }
-        void labelColor(color _tectColor) {
-            this.textColor = _tectColor;
+        void labelColor(color _textColor) {
+            this.textColor = _textColor;
         }
     }
     
@@ -282,8 +282,8 @@ public class TextLib {
         papplet.registerMethod("draw", this);
     }
     
-    //mode = 1のときdurationの時間内でテキストを表示する
-    //mode = 2のとき1文字あたりintervalの時間でテキストを表示する
+    //mode = 0のときdurationの時間内でテキストを表示する
+    //mode = 1のとき1文字あたりintervalの時間でテキストを表示する
     void setText(String _text, float _x, float _y, float _time, int _mode) {
         if (visible){
             return;
