@@ -58,6 +58,7 @@ class DataSelect implements Scene {
         }
     }
 
+    // セーブデータ名をGameクラスへ送る
     void setPlayData(String playData) {
         ((dESKtop.Game)app.sceneList[2]).playData = playData;
     }

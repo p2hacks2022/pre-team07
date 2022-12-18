@@ -96,6 +96,15 @@ class Game implements Scene {
         gameScenes[sceneNum].mousePressed();
     }
 
+    void dispose() {
+        if(player.field == 3 && player.floor == 3) {
+            if(player.pos.x == ((Adventure)gameScenes[0]).mapCol-2 && player.pos.y == 2) {
+                fileIO.saveData.setInt(1, 2, 1);
+                saveTable(fileIO.saveData, fileIO.dataPath+playData+".csv");
+            }
+        }
+    }
+
     class GameScene {
         GameScene() {
         }
@@ -126,8 +135,13 @@ class Game implements Scene {
         // 1方向目の移動中か
         int moveDirectCount;
         int moveStep;
+        // 鍵センサーが反応するブロックのマス範囲
+        int keyRange = 12;
         // プレーヤ―の画像
         int playerImgNum = 0;
+        // 鍵の位置
+        int keyX;
+        int keyY;
         // 敵が出現する確率(0~100%で指定)
         float enemyProbability = 2;
         boolean changeFloor;
@@ -141,6 +155,8 @@ class Game implements Scene {
             player.pos = new PVectorInt(getMapNum(8)[1], getMapNum(8)[0]);
             player.vec = new PVectorInt(0, 1);
             keyFlag = false;
+            keyX = getMapNum(-1)[0];
+            keyY = getMapNum(-1)[1];
             setup();
             textLib.setVisible(false);
             textLib.setText("ここは「"+floorMapName[getFloorInt(player.floor, player.field)]+"」", width/2.0, height-75, 0.1, 1);
@@ -156,6 +172,7 @@ class Game implements Scene {
             drawMap();
             if(!changeFloor) {
                 drawCursor(mouseX, mouseY);
+                keySensor(player.pos.x, player.pos.y);
             }
             drawKeyFrame();
             if (keyFlag) {
@@ -167,7 +184,7 @@ class Game implements Scene {
                 rect(0, 0, width, height);
                 int w = fileIO.playerStandImg.width;
                 int h = fileIO.playerStandImg.height;
-                image(fileIO.playerStandImg, width-100, 100, w*0.7, h*0.7);
+                image(fileIO.playerStandImg, width-200, 120, w*0.5, h*0.5);
                 w = fileIO.panel.width;
                 h = fileIO.panel.height;
                 image(fileIO.panel, width/2.0-(w*2*0.5), height - 180, w*2, h);
@@ -227,7 +244,7 @@ class Game implements Scene {
             if (_playData == "saveData1") {
                 player.field = fileIO.saveData.getInt(1, 0);
                 player.floor = fileIO.saveData.getInt(1, 1);
-                println(player.field, ",", player.floor);
+                //println(player.field, ",", player.floor);
                 map = loadTable("Map"+str(player.field)+"_"+str(player.floor)+".csv");
             }
         }
@@ -353,6 +370,31 @@ class Game implements Scene {
             fill(0);
             // text(player.pos.x + ", " + player.pos.y, width / 2, height / 2 - 60);
             drawPlayer(drawPlayerX, drawPlayerY, centerXFlag, centerYFlag);
+        }
+
+        void keySensor(int x, int y) {
+            int dis=0;
+            boolean flag = false;
+            
+            if(abs(keyX-x) < abs(keyY-y)) {
+                if(abs(keyY-y) <= keyRange || (player.field == 3 && player.floor == 3 && abs(-1-y) <= keyRange)) {
+                    flag = true;
+                    dis = abs(keyY-y);
+                }
+            }
+            else {
+                if(abs(keyX-x) <= keyRange|| (player.field == 3 && player.floor == 3 && abs(-1-x) <= keyRange)) {
+                    flag = true;
+                    dis = abs(keyX-x);
+                }
+            }
+            if(flag) {
+                // あとで鍵との近さによって音量を調整する
+                // setVolum(dis/keyRange);
+                fill(255, 0, 0, dis/keyRange*255.0);
+                circle(30, 400, 20);
+                println(dis/keyRange*255.0);
+            }
         }
 
         void drawCursor(float x, float y) {
@@ -544,7 +586,7 @@ class Game implements Scene {
 
         void setup() {
             phase = 0;
-            println(enemy.name);
+            //println(enemy.name);
             buttons = new Button[]{
                 new Button(this, "localGuard", 100, height - 120, 80, 80, 10), 
                 new Button(this, "remoteGuard", width - 180, height - 120, 80, 80, 10), 
@@ -577,7 +619,7 @@ class Game implements Scene {
             case 2:
 
                 print("you : ");
-                println(millis() - startTime);
+                //println(millis() - startTime);
                 if (!isMovieFinished && startTime+nowDuration < millis()) {
                     movie = fileIO.movies[getIndex(enemy.guardType)];
                     movie.play();
@@ -599,7 +641,7 @@ class Game implements Scene {
                 break;
             case 3:
                 print("teki : ");
-                println(millis() - startTime);
+                //println(millis() - startTime);
                 if (!isMovieFinished && startTime+nowDuration < millis()) {
                     movie = fileIO.movies[getIndex(enemy.guardType)];
                     movie.play();
@@ -708,10 +750,10 @@ class Game implements Scene {
             setVisibleXY(false);
             if (enemy.hp <= 0) {
                 gameSceneChange(0);
-                println("toAdventure");
+                //println("toAdventure");
             } else if (player.hp <= 0) {
                 gameSceneChange(2);
-                println("gameOver");
+                //println("gameOver");
             }
         }
 
@@ -760,4 +802,8 @@ class Game implements Scene {
         void mousePressed() {
         }
     }
+}
+
+void dispose() {
+    app.dispose();
 }

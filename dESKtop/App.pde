@@ -57,18 +57,18 @@ class App {
         textSize(50);
         fill(255);
         text("LOADING   ", width-5, height-5);
-        if(frameCount % 10 == 0) {
+        if (frameCount % 10 == 0) {
             transitionPoint = 3<transitionPoint ? 0 : ++transitionPoint;
         }
         switch(transitionPoint) {
-            case 1:
-                text(".  ", width-5, height-5);
+        case 1:
+            text(".  ", width-5, height-5);
             break;
-            case 2:
-                text(".. ", width-5, height-5);
+        case 2:
+            text(".. ", width-5, height-5);
             break;
-            case 3:
-                text("...", width-5, height-5);
+        case 3:
+            text("...", width-5, height-5);
             break;
         }
     }
@@ -89,6 +89,12 @@ class App {
     void mousePressed() {
         if (!sceneChangeFlag) {
             sceneList[scene].mousePressed();
+        }
+    }
+
+    void dispose() {
+        if (scene == 2) {
+            ((dESKtop.Game)app.sceneList[2]).dispose();
         }
     }
 }
