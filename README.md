@@ -18,7 +18,7 @@ Githubからダウンロードして、そこからファイルを開く。そ�
  また自分たちで考えた、簡単かつ、論理的な思考回路が身につく戦闘、記憶力の向上につながる、ダンジョン探索パートなどもぜひ体験してほしいと思いました。
 
 スクリーンショット(任意) 
-<a/><img width="427" alt="スクリーンショット 2022-12-18 122139" src="https://user-images.githubusercontent.com/120097886/208280259-7658f7aa-9223-44e6-af04-0d63827d5316.png"></a>
+<img width="427" alt="スクリーンショット 2022-12-18 122139" src="https://user-images.githubusercontent.com/120097886/208280259-7658f7aa-9223-44e6-af04-0d63827d5316.png">
 ![image (2)](https://user-images.githubusercontent.com/120097886/208280263-c9752a41-0f6c-4f24-a110-4a614777179c.png)
 
 ## 開発体制  
