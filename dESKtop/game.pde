@@ -876,6 +876,7 @@ class Game implements Scene {
     }
 
     class GameOver extends GameScene {
+        //dataSelectに戻る
         Button button;
 
         GameOver() {
