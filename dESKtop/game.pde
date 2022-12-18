@@ -1,10 +1,11 @@
 class Game implements Scene {
-    Player player;
+    Player player = null;
     Enemy[] enemies;
     Enemy enemy;
     TextLib textLib;
     String playData;
     Table map;
+    boolean memoryFlag;
     int[] floorMapTotal = new int[]{2, 2, 3};
     String[] floorMapName = new String[]{
         "アプリケーション層", 
@@ -29,6 +30,7 @@ class Game implements Scene {
         player = new Player();
         player.pos = new PVectorInt(int(CAMERA_RANGE_X / 2.0), int(CAMERA_RANGE_Y / 2.0));
         player.vec = new PVectorInt(0, 0);
+        memoryFlag = boolean(fileIO.saveData.getInt(1, 2));
         enemies = new Enemy[]{
             new Enemy("ビット", 128, 50, 100, 0), 
             new Enemy("ドローン", 256, 50, 150, 1), 
@@ -98,8 +100,11 @@ class Game implements Scene {
     }
 
     void dispose() {
-        if(player.field == 3 && player.floor == 3) {
-            if(player.pos.x == ((Adventure)gameScenes[0]).mapCol-2 && player.pos.y == 2) {
+        if (player == null) {
+            return;
+        }
+        if (player.field == 3 && player.floor == 3) {
+            if (player.pos.x == ((Adventure)gameScenes[0]).mapCol-2 && player.pos.y == 2) {
                 fileIO.saveData.setInt(1, 2, 1);
                 saveTable(fileIO.saveData, fileIO.dataPath+playData+".csv");
             }
@@ -162,6 +167,8 @@ class Game implements Scene {
             textLib.setVisible(false);
             textLib.setText("ここは「"+floorMapName[getFloorInt(player.floor, player.field)]+"」", width/2.0, height-75, 0.1, 1);
             textLib.setColor(color(255));
+            // fileIO.sensorSound.play(0);
+            // setVolum(fileIO.sensorSound, 0);
         }
 
         void setup() {
@@ -171,7 +178,7 @@ class Game implements Scene {
 
         void draw() {
             drawMap();
-            if(!changeFloor) {
+            if (!changeFloor) {
                 drawCursor(mouseX, mouseY);
                 keySensor(player.pos.x, player.pos.y);
             }
@@ -180,7 +187,7 @@ class Game implements Scene {
                 drawKey();
             }
             update();
-            if(changeFloor) {
+            if (changeFloor) {
                 fill(0, 150);
                 rect(0, 0, width, height);
                 int w = fileIO.playerStandImg.width;
@@ -189,7 +196,7 @@ class Game implements Scene {
                 w = fileIO.panel.width;
                 h = fileIO.panel.height;
                 image(fileIO.panel, width/2.0-(w*2*0.5), height - 180, w*2, h);
-                
+
                 fill(255);
                 pushMatrix();
                 translate(width/2.0+w-40, height-215+h+map(sin(frameCount/15.0), -1, 1, 0, 10));
@@ -201,8 +208,7 @@ class Game implements Scene {
         void mousePressed() {
             if (!changeFloor) {
                 setTarget(mouseX, mouseY);
-            }
-            else {
+            } else {
                 changeFloor = false;
                 textLib.setVisible(false);
             }
@@ -369,33 +375,40 @@ class Game implements Scene {
 
             textSize(20);
             fill(0);
-            // text(player.pos.x + ", " + player.pos.y, width / 2, height / 2 - 60);
             drawPlayer(drawPlayerX, drawPlayerY, centerXFlag, centerYFlag);
         }
 
         void keySensor(int x, int y) {
             int dis=0;
             boolean flag = false;
-            
-            if(abs(keyX-x) < abs(keyY-y)) {
-                if(abs(keyY-y) <= keyRange || (player.field == 3 && player.floor == 3 && abs(-1-y) <= keyRange)) {
+
+            if ((player.field == 3 && player.floor == 3 && abs(-1-y) <= keyRange) && abs(mapCol-x) <= keyRange) {
+                flag = true;
+                if (abs(keyX-x) < abs(keyY-y)) {
+                    dis = abs(keyY-y);
+                } else {
+                    abs(keyX-x);
+                }
+            } else if (abs(keyX-x) < abs(keyY-y)) {
+                if (abs(keyY-y) <= keyRange) {
                     flag = true;
                     dis = abs(keyY-y);
                 }
-            }
-            else {
-                if(abs(keyX-x) <= keyRange|| (player.field == 3 && player.floor == 3 && abs(-1-x) <= keyRange)) {
+            } else {
+                if (abs(keyX-x) <= keyRange) {
                     flag = true;
                     dis = abs(keyX-x);
                 }
             }
-            if(flag) {
+            if (flag && (!keyFlag && !(memoryFlag || (player.field == 3 && player.floor == 3)))) {
                 // あとで鍵との近さによって音量を調整する
-                // setVolum(dis/keyRange);
-                fill(255, 0, 0, dis/keyRange*255.0);
-                circle(30, 400, 20);
-                println(dis/keyRange*255.0);
+                // setVolum(fileIO.sensorSound, (dis/keyRange)*100.0);
+                // println((dis/keyRange)*100.0);
             }
+        }
+
+        void setVolum(AudioPlayer sound, float vol) {
+            sound.setGain(map(vol, 0, 100, 0, 8.0));
         }
 
         void drawCursor(float x, float y) {
@@ -447,15 +460,15 @@ class Game implements Scene {
             switch(n) {
                 // 床なら1を返す
             case 1 : 
-            case  2 :
+            case 2:
             case 3:
                 return 1;
                 // 壁の上面なら2を返す
-            case 4 :
+            case 4:
             case 5:
                 return 2;
                 // 壁の側面なら2を返す
-            case 6 :
+            case 6:
             case 7:
                 return 3;
                 // 鍵なら4を返す
@@ -478,11 +491,11 @@ class Game implements Scene {
 
         Enemy appearEnemy(int n) {
             switch(n) {
-                case 1:
+            case 1:
                 return enemies[int(random(0, 2))];
-                case 2:
+            case 2:
                 return enemies[int(random(1, 4))];
-                case 3:
+            case 3:
                 return enemies[int(random(4, 5))];
             }
             return enemies[-1];
@@ -529,13 +542,14 @@ class Game implements Scene {
                 moveStep = 0;
                 moveDirectCount++;
                 getKey(player.pos.y, player.pos.x);
+                fileIO.pin.play(0);
                 break;
                 // ゴールに到着
             case 9:
                 if (keyFlag) {
                     moveStep = 0;
                     // ラスボス部屋転移
-                    if(player.field == 3 && player.floor == 3) {
+                    if (player.field == 3 && player.floor == 3) {
                         enemy = new Enemy(enemies[5]);
                         gameSceneChange(1);
                     }
@@ -552,6 +566,8 @@ class Game implements Scene {
                         gameSceneChange(0);
                         gameScenes[0] = new Adventure();
                     }
+                } else {
+                    fileIO.bu.play(0);
                 }
                 break;
             }
@@ -808,9 +824,9 @@ class Game implements Scene {
 
         void action(CharacterBase attack, CharacterBase guard) {
             if (attack.attackType == "localAttack") {
-                
+
                 attack.hp -= (int)(decideDamage(attack) * SELF_DAMAGE_RATE);
-                
+
                 if (guard.guardType == "localGuard") {
                     //ダメージなし
                     guard.hp -= 0;
@@ -822,13 +838,12 @@ class Game implements Scene {
                         guard.name + "に" + decideDamage(attack) + "GBダメージ与えた" : 
                         guard.name + "は" + decideDamage(attack) + "GBダメージ受けた";
                 }
-
             } else if (attack.attackType == "remoteAttack") {
-                
+
                 if (guard.guardType == "localGuard") {
                     println("before : "+guard.hp);
                     guard.hp -= decideDamage(attack);
-                println("after : "+guard.hp);
+                    println("after : "+guard.hp);
                     text = attack instanceof Player ? 
                         guard.name + "に" + decideDamage(attack) + "GBダメージ与えた" : 
                         guard.name + "は" + decideDamage(attack) + "GBダメージ受けた";
@@ -842,7 +857,7 @@ class Game implements Scene {
         int decideDamage(CharacterBase attack) {
             return (attack.powerLower + (int)random(attack.powerUpper + 1));
         }
-        //ゆるして
+
         void showHpPlayerBar(CharacterBase chara) {
             fill(255);
             textSize(20);
@@ -857,7 +872,7 @@ class Game implements Scene {
             rect(100, 60, 150*rate, 10);
             fill(255);
         }
-        //ゆるして
+
         void showHpEnemyBar(CharacterBase chara) {
             fill(255);
             textSize(20);

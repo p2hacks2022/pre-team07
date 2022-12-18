@@ -7,9 +7,9 @@ Minim minim;
 
 void setup() {
     size(850, 550);
+    minim = new Minim(this);
     fileIO = new FileIO();
     app = new App();
-    minim = new Minim(this);
 }
 
 void draw() {
@@ -17,7 +17,7 @@ void draw() {
 }
 
 void keyPressed() {
-    app.keyPressed();
+    // app.keyPressed();
 }
 
 void mousePressed() {

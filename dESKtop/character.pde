@@ -9,6 +9,5 @@ class CharacterBase {
     String guardType;
     String attackType;
     CharacterBase() {
-        
     }
 }

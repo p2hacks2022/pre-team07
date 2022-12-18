@@ -44,12 +44,14 @@ class DataSelect implements Scene {
             app.changeScene(2);
             // println("play [" + dataName + "]");
         }
+        fileIO.pon.play(0);
     }
 
     //ボタンが押された際に実行される
     void saveData1() {
         //fileIO.audioPlayers[1].play();
         dataName = "saveData1";
+        fileIO.pon.play(0);
     }
 
     //ボタンが押された際に実行される
@@ -58,6 +60,7 @@ class DataSelect implements Scene {
             dataName = "";
             println("[" + dataName + "] deleted");
         }
+        fileIO.pon.play(0);
     }
 
     // セーブデータ名をGameクラスへ送る

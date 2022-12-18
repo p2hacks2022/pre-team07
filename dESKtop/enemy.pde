@@ -8,7 +8,7 @@ class Enemy extends CharacterBase {
         this.powerLower = powerLower;
         this.id = id;
     }
-    
+
     Enemy(Enemy enemy) {
         this.name = enemy.name;
         this.hp = enemy.hp;

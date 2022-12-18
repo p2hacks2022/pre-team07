@@ -2,7 +2,7 @@ class Player extends CharacterBase {
     PVectorInt pos;
     PVectorInt vec;
     int floor;
-    
+
     Player() {
         this.name = "アステル";
         this.hp = 1024;

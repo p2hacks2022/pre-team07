@@ -18,6 +18,11 @@ class FileIO {
     PImage gameOverImg;
     Movie[] movies;
     AudioPlayer[] audioPlayers;
+    AudioPlayer sensorSound;
+    AudioPlayer pin;
+    AudioPlayer pon;
+    AudioPlayer fon;
+    AudioPlayer bu;
 
     FileIO() {
         init();
@@ -46,15 +51,15 @@ class FileIO {
         battleIconImg = new PImage[]{
             loadImage(dataPath+"localGuard_image.png"), 
             loadImage(dataPath+"remoteGuard_image.png"), 
-            loadImage(dataPath+"localAttack_image.png"),
+            loadImage(dataPath+"localAttack_image.png"), 
             loadImage(dataPath+"remoteAttack_image.png")
         };
         enemyImg = new PImage[]{
             loadImage(dataPath+"bit.png"), 
             loadImage(dataPath+"drone.png"), 
-            loadImage(dataPath+"gearfish.png"),
-            loadImage(dataPath+"runner.png"),
-            loadImage(dataPath+"guardmachine.png"),
+            loadImage(dataPath+"gearfish.png"), 
+            loadImage(dataPath+"runner.png"), 
+            loadImage(dataPath+"guardmachine.png"), 
             loadImage(dataPath+"lastboss.png")
         };
         keyImg = loadImage(dataPath+"key.png");
@@ -77,6 +82,11 @@ class FileIO {
             new Movie(papplet, "localAttack.mp4"), 
             new Movie(papplet, "remoteAttack.mp4")
         };
+        sensorSound = minim.loadFile(dataPath+"sensor.mp3");
+        pin = minim.loadFile(dataPath+"pin.mp3");
+        pon = minim.loadFile(dataPath+"pon.mp3");
+        fon = minim.loadFile(dataPath+"fon.mp3");
+        bu = minim.loadFile(dataPath+"sensor.mp3");
         //audioPlayers = new AudioPlayer[]{
         //    minim.loadFile(""),
         //    minim.loadFile(""),
