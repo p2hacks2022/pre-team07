@@ -277,13 +277,18 @@ public class TextLib {
     float y;
     float time;
     int mode;
+    color c=color(255);;
     
     TextLib() {
         papplet.registerMethod("draw", this);
     }
     
-    //mode = 1のときdurationの時間内でテキストを表示する
-    //mode = 2のとき1文字あたりintervalの時間でテキストを表示する
+    void setColor(color _color) {
+        this.c = _color;
+    }
+    
+    //mode = 0のときdurationの時間内でテキストを表示する
+    //mode = 1のとき1文字あたりintervalの時間でテキストを表示する
     void setText(String _text, float _x, float _y, float _time, int _mode) {
         if (visible){
             return;
@@ -306,6 +311,9 @@ public class TextLib {
         if (!visible) {
             return;
         }
+        push();
+        fill(c);
+        textAlign(CENTER, LEFT);
         switch(mode) {
             case 0:
                 drawAnimationText(time * 1000 / (text.length() - 1));
@@ -314,6 +322,7 @@ public class TextLib {
                 drawAnimationText(time * 1000);
                 break;
         }
+        pop();
     }
     
     //クラス外から呼ばないでほしい

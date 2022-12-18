@@ -62,6 +62,20 @@ class Game implements Scene {
         gameSceneSetupFlag = true;
     }
 
+    int getFloorInt(int a, int b) {
+        int ret=0;
+
+        if (a == 1) {
+            ret = b;
+        } else if (a == 2) {
+            ret = floorMapTotal[a-2]+b;
+        } else if (a == 3) {
+            ret = floorMapTotal[a-3]+floorMapTotal[a-2]+b;
+        }
+
+        return ret-1;
+    }
+
     void keyPressed() {
         if (keyCode == LEFT) {
             app.changeScene(1);
@@ -116,8 +130,10 @@ class Game implements Scene {
         int playerImgNum = 0;
         // 敵が出現する確率(0~100%で指定)
         float enemyProbability = 1;
+        boolean changeFloor;
 
         Adventure() {
+            changeFloor = true;
             player = new Player();
             loadMap(playData);
             mapRow = map.getRowCount();
@@ -126,6 +142,9 @@ class Game implements Scene {
             player.vec = new PVectorInt(0, 1);
             keyFlag = false;
             setup();
+            textLib.setVisible(false);
+            textLib.setText("ここは「"+floorMapName[getFloorInt(player.floor, player.field)]+"」", width/2.0, height-75, 0.1, 1);
+            textLib.setColor(color(255));
         }
 
         void setup() {
@@ -135,16 +154,34 @@ class Game implements Scene {
 
         void draw() {
             drawMap();
-            drawCursor(mouseX, mouseY);
+            if(!changeFloor) {
+                drawCursor(mouseX, mouseY);
+            }
             drawKeyFrame();
             if (keyFlag) {
                 drawKey();
             }
             update();
+            if(changeFloor) {
+                fill(0, 150);
+                rect(0, 0, width, height);
+                int w = fileIO.panel.width;
+                int h = fileIO.panel.height;
+                image(fileIO.panel, width/2.0-(w*2*0.5), height - 180, w*2, h);
+                w = fileIO.playerStandImg.width;
+                h = fileIO.playerStandImg.height;
+                image(fileIO.playerStandImg, width-100, 100, w*0.7, h*0.7);
+            }
         }
 
         void mousePressed() {
-            setTarget(mouseX, mouseY);
+            if (!changeFloor) {
+                setTarget(mouseX, mouseY);
+            }
+            else {
+                changeFloor = false;
+                textLib.setVisible(false);
+            }
         }
 
         int[] getMapNum(int n) {
@@ -192,7 +229,7 @@ class Game implements Scene {
         void drwaPlayerImg(int x, int y, int directX, int directY) {
             if (moveStep == 2) {
                 directY = 0;
-            } else if(moveStep == 1) {
+            } else if (moveStep == 1) {
                 directX = 0;
             }
             // 右
@@ -294,6 +331,12 @@ class Game implements Scene {
                         image(fileIO.keyFloorImg, x * tileSize, y * tileSize, tileSize, tileSize);
                         image(fileIO.keyImg, x * tileSize, y * tileSize, tileSize, tileSize);
                         break;
+                    case 5:
+                        image(fileIO.startImg, x * tileSize, y * tileSize, tileSize, tileSize);
+                        break;
+                    case 6:
+                        image(fileIO.goalImg, x * tileSize, y * tileSize, tileSize, tileSize);
+                        break;
                     }
 
                     // rect(x * tileSize, y * tileSize, tileSize, tileSize);
@@ -384,6 +427,18 @@ class Game implements Scene {
             keyFlag = true;
         }
 
+        Enemy appearEnemy(int n) {
+            switch(n) {
+                case 1:
+                return enemies[int(random(0, 2))];
+                case 2:
+                return enemies[int(random(1, 4))];
+                case 3:
+                return enemies[int(random(4, 5))];
+            }
+            return enemies[-1];
+        }
+
         void movePlayer() {
             if (frameCount % 10 != 0) {
                 return;
@@ -399,7 +454,7 @@ class Game implements Scene {
                 if (player.pos.y == targetY || aboutBlock(move) == 2 || aboutBlock(move) == 3) {
                     moveStep = 2;
                     moveDirectCount++;
-                    if(2 <= moveDirectCount) {
+                    if (2 <= moveDirectCount) {
                         player.vec.x = 0;
                     }
                 }
@@ -414,7 +469,7 @@ class Game implements Scene {
                 if (player.pos.x == targetX || aboutBlock(move) == 2 || aboutBlock(move) == 3) {
                     moveStep = 1;
                     moveDirectCount++;
-                    if(2 <= moveDirectCount) {
+                    if (2 <= moveDirectCount) {
                         player.vec.y = 0;
                     }
                 }
@@ -430,16 +485,24 @@ class Game implements Scene {
             case 9:
                 if (keyFlag) {
                     moveStep = 0;
-                    player.floor++;
-                    if (floorMapTotal[player.field-1] < player.floor) {
-                        player.floor = 1;
-                        player.field++;
+                    // ラスボス部屋転移
+                    if(player.field == 3 && player.floor == 3) {
+                        enemy = new Enemy(enemies[5]);
+                        gameSceneChange(1);
                     }
-                    fileIO.saveData.setInt(1, 0, player.field);
-                    fileIO.saveData.setInt(1, 1, player.floor);
-                    saveTable(fileIO.saveData, fileIO.dataPath+playData+".csv");
-                    gameSceneChange(0);
-                    gameScenes[0] = new Adventure();
+                    // 普通の階層転移
+                    else {
+                        player.floor++;
+                        if (floorMapTotal[player.field-1] < player.floor) {
+                            player.floor = 1;
+                            player.field++;
+                        }
+                        fileIO.saveData.setInt(1, 0, player.field);
+                        fileIO.saveData.setInt(1, 1, player.floor);
+                        saveTable(fileIO.saveData, fileIO.dataPath+playData+".csv");
+                        gameSceneChange(0);
+                        gameScenes[0] = new Adventure();
+                    }
                 }
                 break;
             }
@@ -452,7 +515,7 @@ class Game implements Scene {
             if (random(100) < enemyProbability && moveStep != 0 && aboutBlock(map.getInt(player.pos.y, player.pos.x)) == 1) {
                 moveFlag = false;
                 moveStep = 0;
-                enemy = new Enemy(enemies[(int)random(3)]);
+                enemy = new Enemy(appearEnemy(player.field));
                 gameSceneChange(1);
             }
         }

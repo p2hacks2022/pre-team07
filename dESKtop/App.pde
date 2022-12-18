@@ -51,11 +51,11 @@ class App {
 
     // トランジション描画
     void transition() {
-        background(0);
-        textAlign(CENTER, CENTER);
+        image(fileIO.transitionImg, 0, 0, width, height);
+        textAlign(RIGHT, BOTTOM);
         textSize(50);
         fill(255);
-        text("Transition", width/2, height/2);
+        text("LOADING...", width-5, height-5);
     }
 
     // デバッグ用（トランジションは発生しない）

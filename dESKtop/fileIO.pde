@@ -2,6 +2,7 @@ class FileIO {
     String dataPath;
     Table saveData;
     PImage title;
+    PImage transitionImg;
     PImage[] floorImg;
     PImage[] wallSideImg;
     PImage[] wallTopImg;
@@ -10,6 +11,7 @@ class FileIO {
     PImage startImg;
     PImage goalImg;
     PImage[][] playerImg;
+    PImage playerStandImg;
     PImage panel;
     PImage gameOverImg;
     Movie[] movies;
@@ -22,6 +24,7 @@ class FileIO {
         dataPath = "./data/";
         saveData = loadTable(dataPath+"saveData1.csv");
         title = loadImage(dataPath+"title.png");
+        transitionImg = loadImage(dataPath+"transition.png");
         floorImg = new PImage[] {
             loadImage(dataPath+"floor1.png"), 
             loadImage(dataPath+"floor2.png"), 
@@ -46,6 +49,7 @@ class FileIO {
             {loadImage(dataPath+"player3-1.png"), loadImage(dataPath+"player3-2.png"), loadImage(dataPath+"player3-3.png")}, 
             {loadImage(dataPath+"player4-1.png"), loadImage(dataPath+"player4-2.png"), loadImage(dataPath+"player4-3.png")}
         };
+        playerStandImg = loadImage(dataPath+"playerStand.png");
         keyFloorImg = loadImage(dataPath+"keyFloor.png");
         keyImg = loadImage(dataPath+"key.png");
         panel = loadImage(dataPath+"panel.png");

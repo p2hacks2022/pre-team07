@@ -10,9 +10,12 @@ class Title implements Scene {
     void draw() {
         image(fileIO.title, 0, 0, width, height);
         textAlign(CENTER, CENTER);
-        textSize(50);
-        text("Title", width/2, height/2-30);
-        text("Click to Start", width/2, height/2+30);
+        textSize(80);
+        fill(255);
+        text("ナンノ為ノ物語", width/2, height/2-50);
+        textSize(40);
+        fill(255, map(sin(frameCount/7.50), -1, 1, 50, 255));
+        text("Click to Start", width/2, height-100);
     }
 
     void keyPressed() {
