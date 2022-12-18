@@ -1,5 +1,3 @@
-import processing.video.*;
-
 class Game implements Scene {
     Player player;
     Enemy[] enemies;
@@ -32,11 +30,14 @@ class Game implements Scene {
         player.pos = new PVectorInt(int(CAMERA_RANGE_X / 2.0), int(CAMERA_RANGE_Y / 2.0));
         player.vec = new PVectorInt(0, 0);
         enemies = new Enemy[]{
-            new Enemy("zako", 128, 100, 150), 
-            new Enemy("hutuu", 256, 50, 200), 
-            new Enemy("tyubosu", 512, 100, 300), 
-            new Enemy("rasubosu", 512, 150, 400), 
-            new Enemy("rasubosu2", 512, 200, 500), 
+            new Enemy("ビット", 128, 50, 100, 0), 
+            new Enemy("ドローン", 256, 50, 150, 1), 
+            new Enemy("ギアフィッシュ", 512, 100, 200, 2), 
+            //中ボス
+            new Enemy("ランナー", 512, 100, 300, 3), 
+            new Enemy("ガードマシン", 1024, 150, 300, 4), 
+            //ボス
+            new Enemy("", 1024, 150, 400, 5), 
         };
         textLib = new TextLib(); 
         gameScenes = new GameScene[]{
@@ -571,6 +572,7 @@ class Game implements Scene {
 
     class Battle extends GameScene {
         final float SELF_DAMAGE_RATE = 0.1;
+        final float PREPARE_TIME = 3;
         int phase = 0;
         String text;
         Button[] buttons;
@@ -578,6 +580,7 @@ class Game implements Scene {
         float nowDuration;
         boolean first;
         boolean isMovieFinished = false;
+        boolean flag = false;
         Movie movie;
 
         Battle() {
@@ -593,14 +596,20 @@ class Game implements Scene {
                 new Button(this, "localAttack", 100, height - 120, 80, 80, 10), 
                 new Button(this, "remoteAttack", width - 180, height - 120, 80, 80, 10)
             };
-            for (Button button : buttons) {
-                button.set.align(CENTER, TOP);
+            for (int i = 0; i < buttons.length; i++) {
+                buttons[i].set.align(CENTER, TOP);
+                buttons[i].set.bgImage(fileIO.battleIconImg[i]);
             }
             setVisibleXY(false);
+            textLib.setVisible(false);
+            isMovieFinished = false;
+            flag = false;
         }
 
         void draw() {
             background(0);
+            image(fileIO.enemyImg[enemy.id], 200, height / 2);
+            image(fileIO.enemyImg[enemy.id], width - 200, height / 2);
             image(fileIO.panel, 275, height - 180);
             textSize(20);
             switch(phase) {
@@ -617,20 +626,24 @@ class Game implements Scene {
                 textLib.setText("攻撃方法を選んでください", width / 2, height - 80, 0.1, 0);
                 break;
             case 2:
-
-                print("you : ");
-                //println(millis() - startTime);
                 if (!isMovieFinished && startTime+nowDuration < millis()) {
                     movie = fileIO.movies[getIndex(enemy.guardType)];
+                    movie.jump(0);
                     movie.play();
                     nowDuration = movie.duration() * 1000;
                     fileIO.movies[getIndex(enemy.guardType)].play();
                     isMovieFinished = true;
                 } else if (isMovieFinished && startTime+nowDuration < millis()) {
                     isMovieFinished = false;
-                    actionPrepare(!first);
                     setVisibleAB(true);
-                    phase = 0;
+                    if (!flag) {
+                        actionPrepare(!first);
+                        flag = true;
+                    } else {
+                        flag = false;
+                        textLib.setVisible(false);
+                        phase = 0;
+                    }
                 } else {
                     image(movie, 0, 0);
                     fill(255, 0, 0);
@@ -640,20 +653,24 @@ class Game implements Scene {
                 }
                 break;
             case 3:
-                print("teki : ");
-                //println(millis() - startTime);
                 if (!isMovieFinished && startTime+nowDuration < millis()) {
-                    movie = fileIO.movies[getIndex(enemy.guardType)];
+                    movie = fileIO.movies[getIndex(player.guardType)];
+                    movie.jump(0);
                     movie.play();
                     nowDuration = movie.duration() * 1000;
                     isMovieFinished = true;
                 } else if (isMovieFinished && startTime+nowDuration < millis()) {
                     isMovieFinished = false;
-                    actionPrepare(!first);
                     setVisibleAB(true);
-                    phase = 0;
+                    if (!flag) {
+                        actionPrepare(!first);
+                        flag = true;
+                    } else {
+                        flag = false;
+                        textLib.setVisible(false);
+                        phase = 0;
+                    }
                 } else {
-
                     image(movie, 0, 0);
                     fill(255, 0, 0);
                     text("- 敵のターン -", width / 2, height - 159);
@@ -661,7 +678,29 @@ class Game implements Scene {
                     textLib.setText(text, width / 2, height - 80, 0.1, 0);
                 }
                 break;
+                //ゲームオーバー
+            case 4:
+                if (startTime+PREPARE_TIME*1000 < millis()) {
+                    textLib.setVisible(false);
+                    gameSceneChange(2);
+                    println("gameOver");
+                } else {
+                    textLib.setText(player.name+"は削除されました", width / 2, height - 80, 0.03, 0);
+                }
+                break;
+                //勝利
+            case 5:
+                if (startTime+PREPARE_TIME*1000 < millis()) {
+                    textLib.setVisible(false);
+                    gameSceneChange(0);
+                    println("toAdventure");
+                } else {
+                    textLib.setText(enemy.name+"を倒した", width / 2, height - 80, 0.1, 0);
+                }
+                break;
             }
+            showHpPlayerBar(player);
+            showHpEnemyBar(enemy);
         }
 
         void keyPressed() {
@@ -707,7 +746,6 @@ class Game implements Scene {
         }
 
         void finishButton() {
-            textLib.setVisible(false);
             setVisibleXY(false);
             enemy.actionSelect();
             first = random(1) < 0.5;
@@ -715,23 +753,27 @@ class Game implements Scene {
         }
 
         void actionPrepare(boolean act) {
+            textLib.setVisible(false);
+            if (judgeFinish()) {
+                return;
+            }
             if (act) {
                 action(player, enemy);
-                judgeFinish();
                 phase = 2;
                 movie = fileIO.movies[getIndex(player.attackType)];
             } else {
                 action(enemy, player);
-                judgeFinish();
                 phase = 3;
                 movie = fileIO.movies[getIndex(enemy.attackType)];
             }
+            movie.jump(0);
             movie.play();
             nowDuration = movie.duration() * 1000;
             startTime = millis();
         }
 
         int getIndex(String type) {
+            println(type);
             switch (type) {
             case "localGuard":
                 return 0;
@@ -745,33 +787,51 @@ class Game implements Scene {
             return -1;
         }
 
-        void judgeFinish() {
+        boolean judgeFinish() {
             setVisibleAB(false);
             setVisibleXY(false);
+            textLib.setVisible(false);
             if (enemy.hp <= 0) {
-                gameSceneChange(0);
-                //println("toAdventure");
+                println("clear!!");
+                startTime = millis();
+                phase = 5;
+                return true;
             } else if (player.hp <= 0) {
-                gameSceneChange(2);
-                //println("gameOver");
+                println("gameOver!!");
+                startTime = millis();
+                phase = 4;
+                return true;
+            } else {
+                return false;
             }
         }
 
         void action(CharacterBase attack, CharacterBase guard) {
             if (attack.attackType == "localAttack") {
+                
                 attack.hp -= (int)(decideDamage(attack) * SELF_DAMAGE_RATE);
+                
                 if (guard.guardType == "localGuard") {
                     //ダメージなし
                     guard.hp -= 0;
                     text = guard.name + "は攻撃を防いだ";
                 } else if (guard.guardType == "remoteGuard") {
                     guard.hp -= decideDamage(attack);
-                    text = guard.name + "に" + decideDamage(attack) + "GBダメージ与えた";
+
+                    text = attack instanceof Player ? 
+                        guard.name + "に" + decideDamage(attack) + "GBダメージ与えた" : 
+                        guard.name + "は" + decideDamage(attack) + "GBダメージ受けた";
                 }
+
             } else if (attack.attackType == "remoteAttack") {
+                
                 if (guard.guardType == "localGuard") {
+                    println("before : "+guard.hp);
                     guard.hp -= decideDamage(attack);
-                    text = guard.name + "に" + decideDamage(attack) + "GBダメージ与えた";
+                println("after : "+guard.hp);
+                    text = attack instanceof Player ? 
+                        guard.name + "に" + decideDamage(attack) + "GBダメージ与えた" : 
+                        guard.name + "は" + decideDamage(attack) + "GBダメージ受けた";
                 } else if (guard.guardType == "remoteGuard") {
                     guard.hp += decideDamage(attack);
                     text = guard.name + "は攻撃を吸収した";
@@ -780,7 +840,37 @@ class Game implements Scene {
         }
 
         int decideDamage(CharacterBase attack) {
-            return attack.powerLower + (int)random(attack.powerUpper + 1);
+            return (attack.powerLower + (int)random(attack.powerUpper + 1));
+        }
+        //ゆるして
+        void showHpPlayerBar(CharacterBase chara) {
+            fill(255);
+            textSize(20);
+            textAlign(CENTER);
+            println("PlayerHP : "+chara.hp);
+            println("PlayerfirstHP : "+chara.firstHP);
+            text(chara.name, 175, 40);
+            rect(100, 60, 150, 10, 5);
+            float rate = constrain(chara.hp/float(chara.firstHP/**1000*/), 0, 1);
+            rect(100+150*rate, 60, 150*(1-rate), 10);
+            fill(0, 255, 0);
+            rect(100, 60, 150*rate, 10);
+            fill(255);
+        }
+        //ゆるして
+        void showHpEnemyBar(CharacterBase chara) {
+            fill(255);
+            textSize(20);
+            textAlign(CENTER);
+            println("EnemyHP : "+chara.hp);
+            println("EnemyfirstHP : "+chara.firstHP);
+            text(chara.name, width - 175, 40);
+            rect(width-250, 60, 150, 10, 5);
+            float rate = constrain(chara.hp/float(chara.firstHP/**1000*/), 0, 1);
+            rect(width-250+150*rate, 60, 150*(1-rate), 10);
+            fill(0, 255, 0);
+            rect(width-250, 60, 150*rate, 10);
+            fill(255);
         }
     }
 

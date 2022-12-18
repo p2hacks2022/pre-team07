@@ -7,6 +7,8 @@ class FileIO {
     PImage[] wallSideImg;
     PImage[] wallTopImg;
     PImage keyFloorImg;
+    PImage[] battleIconImg;
+    PImage[] enemyImg;
     PImage keyImg;
     PImage startImg;
     PImage goalImg;
@@ -15,6 +17,7 @@ class FileIO {
     PImage panel;
     PImage gameOverImg;
     Movie[] movies;
+    AudioPlayer[] audioPlayers;
 
     FileIO() {
         init();
@@ -40,6 +43,20 @@ class FileIO {
             loadImage(dataPath+"wallTop2.png"), 
             loadImage(dataPath+"wallTop2.png")
         };
+        battleIconImg = new PImage[]{
+            loadImage(dataPath+"localGuard_image.png"), 
+            loadImage(dataPath+"remoteGuard_image.png"), 
+            loadImage(dataPath+"localAttack_image.png"),
+            loadImage(dataPath+"remoteAttack_image.png")
+        };
+        enemyImg = new PImage[]{
+            loadImage(dataPath+"bit.png"), 
+            loadImage(dataPath+"drone.png"), 
+            loadImage(dataPath+"gearfish.png"),
+            loadImage(dataPath+"runner.png"),
+            loadImage(dataPath+"guardmachine.png"),
+            loadImage(dataPath+"lastboss.png")
+        };
         keyImg = loadImage(dataPath+"key.png");
         startImg = loadImage(dataPath+"start.png");
         goalImg = loadImage(dataPath+"goal.png");
@@ -55,10 +72,17 @@ class FileIO {
         panel = loadImage(dataPath+"panel.png");
         gameOverImg = loadImage(dataPath+"gameOver.png");
         movies = new Movie[]{
-            new Movie(papplet, "localBarrier.mov"), 
-            new Movie(papplet, "remoteBarrier.mov"), 
-            new Movie(papplet, "localAttack.mov"), 
-            new Movie(papplet, "remoteAttack.mov")
+            new Movie(papplet, "localBarrier.mp4"), 
+            new Movie(papplet, "remoteBarrier.mp4"), 
+            new Movie(papplet, "localAttack.mp4"), 
+            new Movie(papplet, "remoteAttack.mp4")
         };
+        //audioPlayers = new AudioPlayer[]{
+        //    minim.loadFile(""),
+        //    minim.loadFile(""),
+        //    minim.loadFile(""),
+        //    minim.loadFile(""),
+        //    minim.loadFile("")
+        //};
     }
 }

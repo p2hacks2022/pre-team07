@@ -130,8 +130,8 @@ public class Button {
                 }
             }
         }
-        void labelColor(color _tectColor) {
-            this.textColor = _tectColor;
+        void labelColor(color _textColor) {
+            this.textColor = _textColor;
         }
     }
     
