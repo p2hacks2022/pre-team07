@@ -37,7 +37,7 @@ class Game implements Scene {
             new Enemy("ランナー", 512, 100, 300, 3), 
             new Enemy("ガードマシン", 1024, 150, 300, 4), 
             //ボス
-            new Enemy("", 1024, 150, 400, 5), 
+            new Enemy("カオスクロノス", 1024, 150, 400, 5), 
         };
         textLib = new TextLib(); 
         gameScenes = new GameScene[]{
@@ -98,8 +98,8 @@ class Game implements Scene {
     }
 
     void dispose() {
-        if(player.field == 3 && player.floor == 3) {
-            if(player.pos.x == ((Adventure)gameScenes[0]).mapCol-2 && player.pos.y == 2) {
+        if (player.field == 3 && player.floor == 3) {
+            if (player.pos.x == ((Adventure)gameScenes[0]).mapCol-2 && player.pos.y == 2) {
                 fileIO.saveData.setInt(1, 2, 1);
                 saveTable(fileIO.saveData, fileIO.dataPath+playData+".csv");
             }
@@ -171,7 +171,7 @@ class Game implements Scene {
 
         void draw() {
             drawMap();
-            if(!changeFloor) {
+            if (!changeFloor) {
                 drawCursor(mouseX, mouseY);
                 keySensor(player.pos.x, player.pos.y);
             }
@@ -180,7 +180,7 @@ class Game implements Scene {
                 drawKey();
             }
             update();
-            if(changeFloor) {
+            if (changeFloor) {
                 fill(0, 150);
                 rect(0, 0, width, height);
                 int w = fileIO.playerStandImg.width;
@@ -189,7 +189,7 @@ class Game implements Scene {
                 w = fileIO.panel.width;
                 h = fileIO.panel.height;
                 image(fileIO.panel, width/2.0-(w*2*0.5), height - 180, w*2, h);
-                
+
                 fill(255);
                 pushMatrix();
                 translate(width/2.0+w-40, height-215+h+map(sin(frameCount/15.0), -1, 1, 0, 10));
@@ -201,8 +201,7 @@ class Game implements Scene {
         void mousePressed() {
             if (!changeFloor) {
                 setTarget(mouseX, mouseY);
-            }
-            else {
+            } else {
                 changeFloor = false;
                 textLib.setVisible(false);
             }
@@ -376,20 +375,19 @@ class Game implements Scene {
         void keySensor(int x, int y) {
             int dis=0;
             boolean flag = false;
-            
-            if(abs(keyX-x) < abs(keyY-y)) {
-                if(abs(keyY-y) <= keyRange || (player.field == 3 && player.floor == 3 && abs(-1-y) <= keyRange)) {
+
+            if (abs(keyX-x) < abs(keyY-y)) {
+                if (abs(keyY-y) <= keyRange || (player.field == 3 && player.floor == 3 && abs(-1-y) <= keyRange)) {
                     flag = true;
                     dis = abs(keyY-y);
                 }
-            }
-            else {
-                if(abs(keyX-x) <= keyRange|| (player.field == 3 && player.floor == 3 && abs(-1-x) <= keyRange)) {
+            } else {
+                if (abs(keyX-x) <= keyRange|| (player.field == 3 && player.floor == 3 && abs(-1-x) <= keyRange)) {
                     flag = true;
                     dis = abs(keyX-x);
                 }
             }
-            if(flag) {
+            if (flag) {
                 // あとで鍵との近さによって音量を調整する
                 // setVolum(dis/keyRange);
                 fill(255, 0, 0, dis/keyRange*255.0);
@@ -478,11 +476,11 @@ class Game implements Scene {
 
         Enemy appearEnemy(int n) {
             switch(n) {
-                case 1:
+            case 1:
                 return enemies[int(random(0, 2))];
-                case 2:
+            case 2:
                 return enemies[int(random(1, 4))];
-                case 3:
+            case 3:
                 return enemies[int(random(4, 5))];
             }
             return enemies[-1];
@@ -535,7 +533,7 @@ class Game implements Scene {
                 if (keyFlag) {
                     moveStep = 0;
                     // ラスボス部屋転移
-                    if(player.field == 3 && player.floor == 3) {
+                    if (player.field == 3 && player.floor == 3) {
                         enemy = new Enemy(enemies[5]);
                         gameSceneChange(1);
                     }
@@ -607,21 +605,25 @@ class Game implements Scene {
         }
 
         void draw() {
-            background(0);
-            image(fileIO.enemyImg[enemy.id], 200, height / 2);
-            image(fileIO.enemyImg[enemy.id], width - 200, height / 2);
+            if (enemy.id != 5) {
+                image(fileIO.battleBGImg[player.field], 0, 0, width, height);
+            } else {
+                image(fileIO.battleBGImg[3], 0, 0, width, height);
+            }
+            image(fileIO.playerStandImg, 100, 100, 240, 400);
+            image(fileIO.enemyImg[enemy.id], width - 350, 100, 300, 300);
             image(fileIO.panel, 275, height - 180);
             textSize(20);
             switch(phase) {
             case 0:
                 fill(255, 0, 0);
-                text("- 防御選択 -", width / 2, height - 159);
+                text("- 防御選択 -", width / 2, height - 149);
                 fill(255);
                 textLib.setText("防御方法を選んでください", width / 2, height - 80, 0.1, 0);
                 break;
             case 1:
                 fill(255, 0, 0);
-                text("- 攻撃選択 -", width / 2, height - 159);
+                text("- 攻撃選択 -", width / 2, height - 149);
                 fill(255);
                 textLib.setText("攻撃方法を選んでください", width / 2, height - 80, 0.1, 0);
                 break;
@@ -645,9 +647,9 @@ class Game implements Scene {
                         phase = 0;
                     }
                 } else {
-                    image(movie, 0, 0);
+                    image(movie, 0, 0, width, height);
                     fill(255, 0, 0);
-                    text("- あなたのターン -", width / 2, height - 159);
+                    text("- あなたのターン -", width / 2, height - 149);
                     fill(255);
                     textLib.setText(text, width / 2, height - 80, 0.1, 0);
                 }
@@ -671,9 +673,9 @@ class Game implements Scene {
                         phase = 0;
                     }
                 } else {
-                    image(movie, 0, 0);
+                    image(movie, 0, 0, width, height);
                     fill(255, 0, 0);
-                    text("- 敵のターン -", width / 2, height - 159);
+                    text("- 敵のターン -", width / 2, height - 149);
                     fill(255);
                     textLib.setText(text, width / 2, height - 80, 0.1, 0);
                 }
@@ -808,9 +810,9 @@ class Game implements Scene {
 
         void action(CharacterBase attack, CharacterBase guard) {
             if (attack.attackType == "localAttack") {
-                
+
                 attack.hp -= (int)(decideDamage(attack) * SELF_DAMAGE_RATE);
-                
+
                 if (guard.guardType == "localGuard") {
                     //ダメージなし
                     guard.hp -= 0;
@@ -822,13 +824,12 @@ class Game implements Scene {
                         guard.name + "に" + decideDamage(attack) + "GBダメージ与えた" : 
                         guard.name + "は" + decideDamage(attack) + "GBダメージ受けた";
                 }
-
             } else if (attack.attackType == "remoteAttack") {
-                
+
                 if (guard.guardType == "localGuard") {
                     println("before : "+guard.hp);
                     guard.hp -= decideDamage(attack);
-                println("after : "+guard.hp);
+                    println("after : "+guard.hp);
                     text = attack instanceof Player ? 
                         guard.name + "に" + decideDamage(attack) + "GBダメージ与えた" : 
                         guard.name + "は" + decideDamage(attack) + "GBダメージ受けた";
@@ -875,11 +876,19 @@ class Game implements Scene {
     }
 
     class GameOver extends GameScene {
-
+        Button button;
 
         GameOver() {
         }
         void setup() {
+            button = new Button(this, "returnDataSelect", width / 2, height - 120, 300, 80, 10);
+            button.set.align(CENTER, TOP);
+            button.set.label("DataSelectに戻る", 20);
+        }
+        
+        void returnDataSelect(){
+            button.visible(false);
+            app.changeScene(1);
         }
 
         void draw() {
