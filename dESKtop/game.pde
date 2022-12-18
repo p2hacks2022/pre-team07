@@ -534,8 +534,8 @@ class Game implements Scene {
                 }
                 break;
             }
-            showHpBar(player);
-            showHpBar(enemy);
+            showHpPlayerBar(player);
+            showHpEnemyBar(enemy);
         }
 
         void keyPressed() {
@@ -643,7 +643,9 @@ class Game implements Scene {
 
         void action(CharacterBase attack, CharacterBase guard) {
             if (attack.attackType == "localAttack") {
+                
                 attack.hp -= (int)(decideDamage(attack) * SELF_DAMAGE_RATE);
+                
                 if (guard.guardType == "localGuard") {
                     //ダメージなし
                     guard.hp -= 0;
@@ -655,10 +657,13 @@ class Game implements Scene {
                         guard.name + "に" + decideDamage(attack) + "GBダメージ与えた" : 
                         guard.name + "は" + decideDamage(attack) + "GBダメージ受けた";
                 }
-            } else if (attack.attackType == "remoteAttack") {
-                if (guard.guardType == "localGuard") {
-                    guard.hp -= decideDamage(attack);
 
+            } else if (attack.attackType == "remoteAttack") {
+                
+                if (guard.guardType == "localGuard") {
+                    println("before : "+guard.hp);
+                    guard.hp -= decideDamage(attack);
+                println("after : "+guard.hp);
                     text = attack instanceof Player ? 
                         guard.name + "に" + decideDamage(attack) + "GBダメージ与えた" : 
                         guard.name + "は" + decideDamage(attack) + "GBダメージ受けた";
@@ -670,35 +675,37 @@ class Game implements Scene {
         }
 
         int decideDamage(CharacterBase attack) {
-            return attack.powerLower + (int)random(attack.powerUpper + 1);
+            return (attack.powerLower + (int)random(attack.powerUpper + 1));
         }
-
-        void showHpBar(Player chara) {
+        //ゆるして
+        void showHpPlayerBar(CharacterBase chara) {
             fill(255);
             textSize(20);
             textAlign(CENTER);
+            println("PlayerHP : "+chara.hp);
+            println("PlayerfirstHP : "+chara.firstHP);
             text(chara.name, 175, 40);
-            fill(255);
             rect(100, 60, 150, 10, 5);
-            float rate = constrain(chara.firstHP/float(chara.hp/**1000*/), 0, 1);
+            float rate = constrain(chara.hp/float(chara.firstHP/**1000*/), 0, 1);
+            rect(100+150*rate, 60, 150*(1-rate), 10);
+            fill(0, 255, 0);
+            rect(100, 60, 150*rate, 10);
             fill(255);
-            rect(100+150*rate, 60, 150*(1-rate), 10, 5);
-            fill(127, 255, 255);
-            rect(100, 60, 150*rate, 10, 5);
         }
-
-        void showHpBar(Enemy chara) {
+        //ゆるして
+        void showHpEnemyBar(CharacterBase chara) {
             fill(255);
             textSize(20);
             textAlign(CENTER);
+            println("EnemyHP : "+chara.hp);
+            println("EnemyfirstHP : "+chara.firstHP);
             text(chara.name, width - 175, 40);
-            fill(255);
             rect(width-250, 60, 150, 10, 5);
-            float rate = constrain(chara.firstHP/float(chara.hp/**1000*/), 0, 1);
+            float rate = constrain(chara.hp/float(chara.firstHP/**1000*/), 0, 1);
+            rect(width-250+150*rate, 60, 150*(1-rate), 10);
+            fill(0, 255, 0);
+            rect(width-250, 60, 150*rate, 10);
             fill(255);
-            rect(width-250+150*rate, 60, 150*(1-rate), 10, 5);
-            fill(127, 255, 255);
-            rect(width-250, 60, 150*rate, 10, 5);
         }
     }
 

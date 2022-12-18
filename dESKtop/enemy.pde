@@ -12,6 +12,7 @@ class Enemy extends CharacterBase {
     Enemy(Enemy enemy) {
         this.name = enemy.name;
         this.hp = enemy.hp;
+        this.firstHP = hp;
         this.powerUpper = enemy.powerUpper;
         this.powerLower = enemy.powerLower;
     }
